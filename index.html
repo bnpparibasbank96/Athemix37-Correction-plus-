@@ -342,6 +342,61 @@
 
     .a4-container.blank { background-image: none; }
 
+    /* STYLES SPÉCIFIQUES : VRAIES FRACTIONS HORIZONTALES & TABLEAUX ÉDITABLES */
+    .math-frac {
+      display: inline-flex;
+      flex-direction: column;
+      vertical-align: middle;
+      text-align: center;
+      margin: 0 4px;
+      padding: 2px;
+      border: 1px dashed transparent;
+      cursor: text;
+    }
+    .math-frac:hover {
+      border-color: var(--accent-primary);
+    }
+    .math-num {
+      border-bottom: 1.5px solid #0f172a;
+      padding: 0 4px;
+      outline: none;
+      min-width: 20px;
+      display: inline-block;
+    }
+    .math-den {
+      padding: 0 4px;
+      outline: none;
+      min-width: 20px;
+      display: inline-block;
+    }
+
+    /* Tableaux éditables insérés */
+    .inserted-table-container {
+      position: absolute;
+      z-index: 15;
+      cursor: move;
+      user-select: none;
+      border: 2px dashed transparent;
+      padding: 4px;
+    }
+    .inserted-table-container.selected {
+      border-color: var(--panel-accent) !important;
+      outline: 1px dashed var(--accent-primary);
+    }
+    .custom-editable-table {
+      border-collapse: collapse;
+      background: #ffffff;
+      width: 100%;
+    }
+    .custom-editable-table th, .custom-editable-table td {
+      border: 1px solid #0f172a;
+      padding: 6px 10px;
+      text-align: center;
+      outline: none;
+      min-width: 40px;
+      cursor: text;
+    }
+
     /* FILIGRANE DU TEXTE ET OBJETS INSÉRÉS */
     .watermark-overlay {
       display: none;
@@ -387,7 +442,7 @@
       pointer-events: none;
     }
 
-    .inserted-shape.selected, .watermark-overlay.selected, .imported-img.selected {
+    .inserted-shape.selected, .watermark-overlay.selected, .imported-img.selected, .inserted-table-container.selected {
       border-color: var(--panel-accent) !important;
       outline: 1px dashed var(--accent-primary);
     }
@@ -642,9 +697,10 @@
         box-shadow: none !important;
       }
 
-      .watermark-overlay, .imported-img, .inserted-shape {
+      .watermark-overlay, .imported-img, .inserted-shape, .inserted-table-container {
         border: none !important;
         outline: none !important;
+        background: transparent !important;
       }
     }
   </style>
@@ -674,7 +730,7 @@
     </div>
   </header>
 
-  <!-- MENU LATÉRAL RECONFIGURÉ ET ENRICHI -->
+  <!-- MENU LATÉRAL RECONFIGURÉ -->
   <aside class="sidebar" id="sidebar">
 
     <!-- GROUPE : FORMATAGE DU TEXTE ET COULEURS -->
@@ -730,6 +786,13 @@
       <input type="file" id="imageLoader" accept="image/*" class="custom-input" onchange="importerImage(event)">
     </div>
 
+    <!-- SECTION IMPORTATION REPÈRE AUTONOME -->
+    <div class="menu-group">
+      <div class="menu-title">📐 Importer un Repère Autonome</div>
+      <label style="font-size: 0.75rem; font-weight: 600; margin-bottom: 4px; display: block; color: var(--text-color);">Choisir l'image du repère (ex: PNG/JPG) :</label>
+      <input type="file" id="repereLoader" accept="image/*" class="custom-input" onchange="importerRepereAutonome(event)">
+    </div>
+
     <div class="menu-group">
       <div class="menu-title">🛡️ Filigrane (Facultatif)</div>
       <button class="btn-3d" onclick="toggleWatermark(true)" style="color: var(--accent-primary);">➕ Ajouter Filigrane</button>
@@ -738,7 +801,7 @@
       <input type="color" id="watermarkColor" value="#2563eb" class="custom-input" style="height:40px; padding:2px;" onchange="updateWatermarkColor()">
     </div>
 
-    <!-- OPTION DES SCHÉMAS ET FORMES INTÉGRÉE D'APRÈS L'IMAGE -->
+    <!-- OPTION DES SCHÉMAS ET FORMES INTÉGRÉE -->
     <div class="menu-group">
       <div class="menu-title menu-title-toggle" onclick="toggleShapesAccordion()">
         <span>📐 Outils de Schéma & Tracé</span>
@@ -747,7 +810,6 @@
 
       <!-- Grille visuelle dépliante de TOUTES les formes et symboles -->
       <div class="shapes-accordion-content" id="shapesAccordion">
-        <!-- Lignes -->
         <div class="shape-card-item" onclick="selectShapeTool('line')"><div class="shape-card-icon">📏</div><div>Trait Plein</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('dashed')"><div class="shape-card-icon">┈</div><div>Pointillés</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('dashdot')"><div class="shape-card-icon">∿</div><div>Trait Mixte</div></div>
@@ -756,11 +818,9 @@
         <div class="shape-card-item" onclick="selectShapeTool('curve')"><div class="shape-card-icon">↪</div><div>Ligne Courbe</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('freehand')"><div class="shape-card-icon">✏️</div><div>Dessin Libre</div></div>
 
-        <!-- Rectangles -->
         <div class="shape-card-item" onclick="selectShapeTool('rect')"><div class="shape-card-icon">🔲</div><div>Rectangle</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('round_rect')"><div class="shape-card-icon">▢</div><div>Rect. Arrondi</div></div>
 
-        <!-- Formes de base -->
         <div class="shape-card-item" onclick="selectShapeTool('circle')"><div class="shape-card-icon">⚪</div><div>Cercle / Oval</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('triangle')"><div class="shape-card-icon">🔺</div><div>Triangle</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('diamond')"><div class="shape-card-icon">🔷</div><div>Losange / Condition</div></div>
@@ -769,30 +829,25 @@
         <div class="shape-card-item" onclick="selectShapeTool('star')"><div class="shape-card-icon">⭐</div><div>Étoile</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('cross')"><div class="shape-card-icon">➕</div><div>Croix</div></div>
 
-        <!-- Flèches pleines -->
         <div class="shape-card-item" onclick="selectShapeTool('arrow_right')"><div class="shape-card-icon">➡</div><div>Flèche Droite</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('arrow_left')"><div class="shape-card-icon">⬅</div><div>Flèche Gauche</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('arrow_up')"><div class="shape-card-icon">⬆</div><div>Flèche Haut</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('arrow_down')"><div class="shape-card-icon">⬇</div><div>Flèche Bas</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('arrow_4way')"><div class="shape-card-icon">✢</div><div>Flèche 4-Voies</div></div>
 
-        <!-- Organigrammes -->
         <div class="shape-card-item" onclick="selectShapeTool('flow_process')"><div class="shape-card-icon">▭</div><div>Processus</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('flow_decision')"><div class="shape-card-icon">◇</div><div>Décision</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('flow_terminator')"><div class="shape-card-icon">⬭</div><div>Début / Fin</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('flow_data')"><div class="shape-card-icon">▱</div><div>Données (E/S)</div></div>
 
-        <!-- Bulles & Légendes -->
         <div class="shape-card-item" onclick="selectShapeTool('callout_rect')"><div class="shape-card-icon">💬</div><div>Bulle Rectangulaire</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('callout_cloud')"><div class="shape-card-icon">💭</div><div>Bulle Nuage</div></div>
 
-        <!-- Illustrations & Modèles Word -->
         <div class="shape-card-item" onclick="selectShapeTool('smartart')"><div class="shape-card-icon">📊</div><div>SmartArt Bloc</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('chart_bar')"><div class="shape-card-icon">📈</div><div>Graphique Bâtons</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('icon_symbol')"><div class="shape-card-icon">💡</div><div>Icône / Symbole</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('model_3d')"><div class="shape-card-icon">🧊</div><div>Modèle 3D Cube</div></div>
 
-        <!-- Électrotechnique & Physique -->
         <div class="shape-card-item" onclick="selectShapeTool('resistor')"><div class="shape-card-icon">⚡</div><div>Résistance</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('capacitor')"><div class="shape-card-icon">⏸️</div><div>Condensateur</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('inductor')"><div class="shape-card-icon">🌀</div><div>Bobine</div></div>
@@ -867,6 +922,15 @@
     </div>
 
     <div class="menu-group">
+      <div class="menu-title">📊 Insertion Tableaux Personnalisés</div>
+      <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+        <input type="number" id="customRows" class="custom-input" placeholder="Lignes" value="3" min="1" max="20" style="margin-bottom:0;">
+        <input type="number" id="customCols" class="custom-input" placeholder="Colonnes" value="3" min="1" max="20" style="margin-bottom:0;">
+      </div>
+      <button class="btn-3d" onclick="insererTableauPersonnalise()">➕ Insérer mon Tableau</button>
+    </div>
+
+    <div class="menu-group">
       <div class="menu-title">🔢 Symboles</div>
       <select class="custom-select" onchange="insererSymbolSelect(this)">
         <option value="" disabled selected>-- Insérer un symbole --</option>
@@ -881,7 +945,7 @@
         <option value="λ">λ (Lambda)</option>
         <option value="θ">θ (Theta)</option>
       </select>
-      <button class="btn-3d" onclick="insererFraction()">➕ Insérer Fraction (a/b)</button>
+      <button class="btn-3d" onclick="insererFractionBloc()">➕ Insérer Fraction (Barre Horizontale)</button>
     </div>
 
     <div class="menu-group">
@@ -1028,9 +1092,8 @@
 
     let selectedEl = null;
 
-    /* DÉFINITION DES SVG DE GRAPHES/SCHÉMAS DÉPLAÇABLES DIRECTEMENT SUR LE DOCUMENT */
+    /* DÉFINITION DES SCHÉMAS ET FORMES STANDARDS */
     const SVG_TEMPLATES = {
-      // Électrotechnique
       resistor: `<svg viewBox="0 0 100 40"><line x1="0" y1="20" x2="20" y2="20" stroke="#000" stroke-width="3"/><rect x="20" y="5" width="60" height="30" fill="none" stroke="#000" stroke-width="3"/><line x1="80" y1="20" x2="100" y2="20" stroke="#000" stroke-width="3"/></svg>`,
       capacitor: `<svg viewBox="0 0 100 40"><line x1="0" y1="20" x2="42" y2="20" stroke="#000" stroke-width="3"/><line x1="42" y1="5" x2="42" y2="35" stroke="#000" stroke-width="3"/><line x1="58" y1="5" x2="58" y2="35" stroke="#000" stroke-width="3"/><line x1="58" y1="20" x2="100" y2="20" stroke="#000" stroke-width="3"/></svg>`,
       inductor: `<svg viewBox="0 0 100 40"><line x1="0" y1="20" x2="10" y2="20" stroke="#000" stroke-width="3"/><path d="M 10,20 Q 20,0 30,20 Q 40,0 50,20 Q 60,0 70,20 Q 80,0 90,20" fill="none" stroke="#000" stroke-width="3"/><line x1="90" y1="20" x2="100" y2="20" stroke="#000" stroke-width="3"/></svg>`,
@@ -1038,8 +1101,6 @@
       ground: `<svg viewBox="0 0 60 60"><line x1="30" y1="0" x2="30" y2="30" stroke="#000" stroke-width="3"/><line x1="10" y1="30" x2="50" y2="30" stroke="#000" stroke-width="4"/><line x1="20" y1="40" x2="40" y2="40" stroke="#000" stroke-width="3"/><line x1="25" y1="50" x2="35" y2="50" stroke="#000" stroke-width="2"/></svg>`,
       switch: `<svg viewBox="0 0 100 40"><line x1="0" y1="20" x2="20" y2="20" stroke="#000" stroke-width="3"/><circle cx="20" cy="20" r="4" fill="#000"/><line x1="20" y1="20" x2="75" y2="5" stroke="#000" stroke-width="3"/><circle cx="80" cy="20" r="4" fill="#000"/><line x1="80" y1="20" x2="100" y2="20" stroke="#000" stroke-width="3"/></svg>`,
       motor: `<svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="30" fill="none" stroke="#000" stroke-width="3"/><text x="40" y="48" font-size="24" font-weight="bold" text-anchor="middle">M</text><line x1="0" y1="40" x2="10" y2="40" stroke="#000" stroke-width="3"/><line x1="70" y1="40" x2="80" y2="40" stroke="#000" stroke-width="3"/></svg>`,
-      
-      // Traits & Flèches
       line: `<svg viewBox="0 0 120 20"><line x1="0" y1="10" x2="120" y2="10" stroke="#000" stroke-width="3"/></svg>`,
       dashed: `<svg viewBox="0 0 120 20"><line x1="0" y1="10" x2="120" y2="10" stroke="#000" stroke-width="3" stroke-dasharray="6,6"/></svg>`,
       dashdot: `<svg viewBox="0 0 120 20"><line x1="0" y1="10" x2="120" y2="10" stroke="#000" stroke-width="3" stroke-dasharray="10,4,2,4"/></svg>`,
@@ -1050,8 +1111,6 @@
       arrow_up: `<svg viewBox="0 0 40 100"><path d="M 10 100 L 10 40 L 0 40 L 20 0 L 40 40 L 30 40 L 30 100 Z" fill="#000"/></svg>`,
       arrow_down: `<svg viewBox="0 0 40 100"><path d="M 10 0 L 10 60 L 0 60 L 20 100 L 40 60 L 30 60 L 30 0 Z" fill="#000"/></svg>`,
       curve: `<svg viewBox="0 0 100 60"><path d="M 10 50 Q 50 0 90 50" stroke="#000" stroke-width="3" fill="none"/></svg>`,
-
-      // Formes Géométriques & Organigrammes (Grafcet)
       rect: `<svg viewBox="0 0 100 60"><rect x="3" y="3" width="94" height="54" fill="none" stroke="#000" stroke-width="3"/></svg>`,
       round_rect: `<svg viewBox="0 0 100 60"><rect x="3" y="3" width="94" height="54" rx="10" fill="none" stroke="#000" stroke-width="3"/></svg>`,
       circle: `<svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="#000" stroke-width="3"/></svg>`,
@@ -1061,7 +1120,6 @@
       parallelogram: `<svg viewBox="0 0 100 60"><polygon points="20,3 97,3 80,57 3,57" fill="none" stroke="#000" stroke-width="3"/></svg>`,
       star: `<svg viewBox="0 0 80 80"><polygon points="40,2 51,25 78,28 58,46 64,73 40,59 16,73 22,46 2,28 29,25" fill="none" stroke="#000" stroke-width="3"/></svg>`,
       cross: `<svg viewBox="0 0 80 80"><polygon points="28,2 52,2 52,28 78,28 78,52 52,52 52,78 28,78 28,52 2,52 2,28 28,28" fill="none" stroke="#000" stroke-width="3"/></svg>`,
-
       flow_process: `<svg viewBox="0 0 100 50"><rect x="3" y="3" width="94" height="44" fill="none" stroke="#000" stroke-width="3"/></svg>`,
       flow_decision: `<svg viewBox="0 0 100 60"><polygon points="50,3 97,30 50,57 3,30" fill="none" stroke="#000" stroke-width="3"/></svg>`,
       flow_terminator: `<svg viewBox="0 0 100 50"><rect x="3" y="3" width="94" height="44" rx="22" fill="none" stroke="#000" stroke-width="3"/></svg>`,
@@ -1070,7 +1128,6 @@
       callout_cloud: `<svg viewBox="0 0 100 70"><path d="M 20 40 Q 10 20 30 10 Q 50 0 70 10 Q 90 20 80 40 Q 95 55 70 60 Q 50 65 30 60 Q 5 55 20 40 Z" fill="none" stroke="#000" stroke-width="3"/></svg>`
     };
 
-    /* FONCTION POUR DÉPLIER / REPLIER LE MENU DE FORMES */
     function toggleShapesAccordion() {
       const accordion = document.getElementById('shapesAccordion');
       const arrow = document.getElementById('accordionArrow');
@@ -1078,7 +1135,6 @@
       arrow.textContent = accordion.classList.contains('open') ? '▲' : '▼';
     }
 
-    /* SELECTION DE FORME ET INSERTION DIRECTE SUR LE DOCUMENT */
     function selectShapeTool(toolKey) {
       document.querySelectorAll('.shape-card-item').forEach(card => card.classList.remove('active'));
       setTool(toolKey);
@@ -1091,6 +1147,54 @@
       }
     }
 
+    /* FONCTION D'IMPORTATION DU REPÈRE AUTONOME EXTERNE */
+    function importerRepereAutonome(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.className = 'imported-img';
+          img.style.top = '220px';
+          img.style.left = '150px';
+          img.style.width = '300px';
+          document.getElementById('a4Page').appendChild(img);
+          makeElementInteractive(img);
+          selectElement(img);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    /* FONCTION D'INSERTION DE TABLEAU ÉDITABLE PERSONNALISÉ */
+    function insererTableauPersonnalise() {
+      const lignes = parseInt(document.getElementById('customRows').value) || 3;
+      const colonnes = parseInt(document.getElementById('customCols').value) || 3;
+      
+      const currentPage = document.getElementById('a4Page');
+      const container = document.createElement('div');
+      container.className = 'inserted-table-container';
+      
+      let tableHTML = `<table class="custom-editable-table">`;
+      for(let i=0; i<lignes; i++) {
+        tableHTML += `<tr>`;
+        for(let j=0; j<colonnes; j++) {
+          tableHTML += `<td contenteditable="true">Cel ${i+1},${j+1}</td>`;
+        }
+        tableHTML += `</tr>`;
+      }
+      tableHTML += `</table>`;
+      
+      container.innerHTML = tableHTML;
+      container.style.top = (300 + (document.querySelectorAll('.inserted-table-container').length * 20)) + 'px';
+      container.style.left = '250px';
+
+      currentPage.appendChild(container);
+      makeElementInteractive(container);
+      selectElement(container);
+    }
+
     /* INSERER UNE FORME SVG DIRECTEMENT SUR LE DOCUMENT A4 ET RENDRE INTERACTIVE */
     function insererFormeInsee(toolKey) {
       const currentPage = document.getElementById('a4Page');
@@ -1098,15 +1202,12 @@
       container.className = 'inserted-shape';
       container.innerHTML = SVG_TEMPLATES[toolKey] || SVG_TEMPLATES.rect;
 
-      // Position par défaut au milieu
-      container.style.width = '100px';
-      container.style.height = '60px';
+      container.style.width = '160px';
+      container.style.height = '120px';
       container.style.top = (250 + (document.querySelectorAll('.inserted-shape').length * 15)) + 'px';
       container.style.left = '320px';
 
       currentPage.appendChild(container);
-
-      // Gestion des événements
       makeElementInteractive(container);
       selectElement(container);
     }
@@ -1154,7 +1255,7 @@
     }
 
     function supprimerElementSelectionne() {
-      if (selectedEl && (selectedEl.classList.contains('inserted-shape') || selectedEl.classList.contains('imported-img'))) {
+      if (selectedEl && (selectedEl.classList.contains('inserted-shape') || selectedEl.classList.contains('imported-img') || selectedEl.classList.contains('inserted-table-container'))) {
         selectedEl.remove();
         selectedEl = null;
       }
@@ -1280,7 +1381,6 @@
       updateZoomUI();
     }
 
-    /* ZOOM PINCH TACTILE */
     let initialTouchDistance = 0;
     let initialZoomOnTouch = 1.0;
 
@@ -1313,12 +1413,11 @@
       fitCanvasSize();
     });
 
-    /* GESTION DE L'ÉLÉMENT SÉLECTIONNÉ */
     let state = { x: 0, y: 0, fontSize: 64, opacity: 1, rotation: 0 };
     let steps = { move: 3, width: 4, height: 4, opac: 5, rot: 2 };
 
     function selectElement(el) {
-      document.querySelectorAll('.watermark-overlay, .imported-img, .inserted-shape').forEach(e => e.classList.remove('selected'));
+      document.querySelectorAll('.watermark-overlay, .imported-img, .inserted-shape, .inserted-table-container').forEach(e => e.classList.remove('selected'));
       selectedEl = el;
       if (selectedEl) {
         selectedEl.classList.add('selected');
@@ -1340,10 +1439,9 @@
       document.getElementById('step-' + type).textContent = steps[type];
     }
 
-    /* DEPLACEMENT VIA D-PAD / PANNEAU DE CONTRÔLE */
     function moveElement(dx, dy) {
       if (!selectedEl) return;
-      if (selectedEl.classList.contains('inserted-shape') || selectedEl.classList.contains('imported-img')) {
+      if (selectedEl.classList.contains('inserted-shape') || selectedEl.classList.contains('imported-img') || selectedEl.classList.contains('inserted-table-container')) {
         let currentL = selectedEl.offsetLeft || 0;
         let currentT = selectedEl.offsetTop || 0;
         selectedEl.style.left = (currentL + dx * steps.move) + 'px';
@@ -1397,7 +1495,6 @@
       }
     }
 
-    /* IMPORTATION D'IMAGE */
     function importerImage(e) {
       const file = e.target.files[0];
       if (file) {
@@ -1414,7 +1511,6 @@
       }
     }
 
-    /* GESTION MULTI-PAGES */
     let pageCount = 1;
     function ajouterPageA4() {
       pageCount++;
@@ -1461,7 +1557,6 @@
       canvas.height = dragContainer.clientHeight - 30;
     }
 
-    /* DESSIN ET FORMES DU CANVAS */
     let currentTool = 'line';
     let isDrawing = false;
     let startX = 0, startY = 0;
@@ -1493,13 +1588,36 @@
       document.execCommand('insertText', false, text);
     }
 
-    function insererFraction() {
-      const num = prompt("Numérateur :", "a");
-      const den = prompt("Dénominateur :", "b");
-      if (num && den) insererTexte(`(${num} / ${den})`);
+    function insererFractionBloc() {
+      const sel = window.getSelection();
+      if (!sel.rangeCount) return;
+      const range = sel.getRangeAt(0);
+
+      const fracSpan = document.createElement('span');
+      fracSpan.className = 'math-frac';
+      
+      const numSpan = document.createElement('span');
+      numSpan.className = 'math-num';
+      numSpan.contentEditable = 'true';
+      numSpan.innerHTML = 'a';
+
+      const denSpan = document.createElement('span');
+      denSpan.className = 'math-den';
+      denSpan.contentEditable = 'true';
+      denSpan.innerHTML = 'b';
+
+      fracSpan.appendChild(numSpan);
+      fracSpan.appendChild(denSpan);
+
+      range.deleteContents();
+      range.insertNode(fracSpan);
+
+      const newRange = document.createRange();
+      newRange.selectNodeContents(numSpan);
+      sel.removeAllRanges();
+      sel.addRange(newRange);
     }
 
-    /* DEPLACEMENT DU CADRAN */
     let activeDrag = false, currentX = 0, currentY = 0, initialX = 0, initialY = 0;
 
     dragHandle.addEventListener("mousedown", dragStart);
@@ -1529,7 +1647,6 @@
       }
     }
 
-    /* MOTEUR DE DESSIN CANVAS */
     function getCoords(e) {
       const rect = canvas.getBoundingClientRect();
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
