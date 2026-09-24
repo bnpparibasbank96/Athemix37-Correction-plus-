@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>ATHEMIX37 ESPACE CRÉATION</title>
+  <style>
+    :root {
+      --bg-color: #eef2f6;
+      --card-bg: #ffffff;
+      --text-color: #1e293b;
+      --shadow-dark: #cbd5e1;
+      --accent-primary: #2563eb;
+      --paper-bg: #ffffff;
+      --paper-line: #cbd5e1;
+      
+      /* Style Panneau Sombre */
+      --panel-bg: #111111;
+      --panel-card: #1c1c1c;
+      --panel-border: #2a2a2a;
+      --panel-text: #e2e8f0;
+      --panel-accent: #f59e0b;
+    }
+
+    [data-theme="mint"] {
+      --bg-color: #e6f4ea;
+      --card-bg: #f3f9f4;
+      --text-color: #14532d;
+      --shadow-dark: #c2e0cb;
+      --accent-primary: #059669;
+    }
+
+    [data-theme="lavender"] {
+      --bg-color: #f3e8ff;
+      --card-bg: #f9f5ff;
+      --text-color: #4c1d95;
+      --shadow-dark: #ddd6fe;
+      --accent-primary: #7c3aed;
+    }
+
+    [data-theme="sand"] {
+      --bg-color: #fef3c7;
+      --card-bg: #fffbeb;
+      --text-color: #78350f;
+      --shadow-dark: #fde68a;
+      --accent-primary: #d97706;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.3s ease;
+      padding-bottom: 240px;
+      overflow-x: hidden;
+    }
+
+    /* BARRE SUPÉRIEURE */
+    header {
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-bg);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      z-index: 100;
+      position: sticky;
+      top: 0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .burger-btn {
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 8px;
+      background: var(--card-bg);
+      box-shadow: 2px 2px 6px var(--shadow-dark);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .burger-btn span {
+      width: 20px;
+      height: 3px;
+      background: var(--accent-primary);
+      border-radius: 2px;
+    }
+
+    .logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text-color);
+      letter-spacing: 0.5px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    /* CONTROLES DE ZOOM RAPIDE */
+    .zoom-controls {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-color);
+      padding: 4px;
+      border-radius: 8px;
+      align-items: center;
+    }
+
+    .zoom-btn {
+      border: none;
+      background: var(--card-bg);
+      color: var(--text-color);
+      font-weight: bold;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 1px 1px 3px var(--shadow-dark);
+    }
+
+    .zoom-display {
+      font-size: 0.8rem;
+      font-weight: 700;
+      min-width: 45px;
+      text-align: center;
+    }
+
+    /* MENU LATÉRAL */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -380px;
+      width: 350px;
+      height: 100vh;
+      background: var(--card-bg);
+      box-shadow: 6px 0 20px rgba(0,0,0,0.2);
+      z-index: 2000;
+      transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 20px 18px 40px 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .sidebar.open { left: 0; }
+
+    .menu-group {
+      background: var(--bg-color);
+      padding: 12px;
+      border-radius: 10px;
+      border-left: 4px solid var(--accent-primary);
+    }
+
+    .menu-title {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .menu-title-toggle {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .btn-3d {
+      width: 100%;
+      border: none;
+      background: var(--card-bg);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text-color);
+      cursor: pointer;
+      box-shadow: 2px 2px 4px var(--shadow-dark);
+      margin-bottom: 6px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-inline-group {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .btn-inline-group .btn-3d {
+      justify-content: center;
+      margin-bottom: 0;
+      text-align: center;
+    }
+
+    .color-picker-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .color-picker-row input[type="color"] {
+      border: none;
+      width: 45px;
+      height: 32px;
+      border-radius: 6px;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    .custom-select, .custom-input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1.5px solid var(--accent-primary);
+      background: var(--card-bg);
+      color: var(--text-color);
+      font-weight: 600;
+      font-size: 0.88rem;
+      outline: none;
+      cursor: pointer;
+      margin-bottom: 8px;
+    }
+
+    /* DÉROULANT DU MENU DE SCHÉMAS & DESSINS */
+    .shapes-accordion-content {
+      display: none;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .shapes-accordion-content.open {
+      display: grid;
+    }
+
+    .shape-card-item {
+      background: var(--card-bg);
+      border: 1px solid var(--shadow-dark);
+      border-radius: 8px;
+      padding: 8px 6px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 600;
+      box-shadow: 1px 1px 3px var(--shadow-dark);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .shape-card-item:hover {
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+      background: var(--bg-color);
+    }
+
+    .shape-card-item.active {
+      border-color: var(--accent-primary);
+      background: var(--accent-primary);
+      color: #ffffff;
+    }
+
+    .shape-card-icon {
+      font-size: 1.2rem;
+    }
+
+    /* CONTENEUR DE ZOOM & ESPACE DE TRAVAIL */
+    .zoom-viewport {
+      flex: 1;
+      width: 100%;
+      overflow: auto;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px 0;
+      touch-action: pan-x pan-y;
+    }
+
+    .workspace-scaler {
+      transform-origin: top center;
+      transition: transform 0.1s ease-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+      padding: 10px;
+    }
+
+    .a4-container {
+      position: relative;
+      width: 794px;
+      min-height: 1123px;
+      background-color: var(--paper-bg);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      border-radius: 2px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .a4-container.lined {
+      background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
+      background-size: 100% 28px;
+    }
+
+    .a4-container.blank { background-image: none; }
+
+    /* FILIGRANE DU TEXTE ET OBJETS INSÉRÉS */
+    .watermark-overlay {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 4rem;
+      font-weight: 900;
+      color: var(--accent-primary);
+      opacity: 0.12;
+      user-select: none;
+      white-space: nowrap;
+      z-index: 2;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      text-align: center;
+      cursor: pointer;
+      border: 2px dashed transparent;
+      padding: 10px;
+    }
+
+    .watermark-overlay.active { display: block; }
+
+    /* COMPOSANTS / FORMES SUR LE DOCUMENT DE TRAVAIL */
+    .inserted-shape {
+      position: absolute;
+      z-index: 15;
+      cursor: move;
+      user-select: none;
+      touch-action: none;
+      border: 2px dashed transparent;
+      padding: 4px;
+      display: inline-block;
+      top: 300px;
+      left: 300px;
+    }
+
+    .inserted-shape svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .inserted-shape.selected, .watermark-overlay.selected, .imported-img.selected {
+      border-color: var(--panel-accent) !important;
+      outline: 1px dashed var(--accent-primary);
+    }
+
+    /* IMAGES IMPORTÉES */
+    .imported-img {
+      position: absolute;
+      top: 200px;
+      left: 100px;
+      width: 250px;
+      height: auto;
+      z-index: 5;
+      cursor: pointer;
+      border: 2px dashed transparent;
+      user-select: none;
+      touch-action: none;
+    }
+
+    /* EN-TÊTE A4 */
+    .a4-header {
+      border: 2px solid var(--accent-primary);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 20px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 2;
+    }
+
+    .a4-header-row { display: flex; gap: 15px; }
+
+    .a4-header input {
+      border: none;
+      border-bottom: 1px dotted #94a3b8;
+      font-weight: 600;
+      outline: none;
+      padding: 4px;
+      background: transparent;
+      color: #0f172a;
+      flex: 1;
+    }
+
+    .a4-header input.author-field {
+      font-weight: 700;
+      color: var(--accent-primary);
+    }
+
+    /* CADRAN DÉPLAÇABLE / DESSIN */
+    .draggable-canvas-container {
+      position: absolute;
+      top: 180px;
+      left: 50px;
+      width: 694px;
+      height: 300px;
+      background: transparent;
+      border: 2px dashed var(--accent-primary);
+      border-radius: 8px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      touch-action: none;
+    }
+
+    .canvas-handle {
+      background: var(--accent-primary);
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 4px 4px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: move;
+      user-select: none;
+    }
+
+    .tool-badge {
+      background: rgba(255,255,255,0.25);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+
+    canvas {
+      display: block;
+      cursor: crosshair;
+      background: transparent;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+
+    /* ÉDITEUR LIBRE */
+    .a4-editor {
+      width: 100%;
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 1.1rem;
+      line-height: 28px;
+      color: #0f172a;
+      z-index: 1;
+      cursor: text;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      min-height: 800px;
+    }
+
+    /* PANNEAU DE CONTRÔLE FIXE EN BAS */
+    .control-panel-fixed {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--panel-bg);
+      border-top: 2px solid var(--panel-border);
+      padding: 10px 15px;
+      z-index: 1000;
+      color: var(--panel-text);
+      box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--panel-accent);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 8px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .panel-box {
+      background: var(--panel-card);
+      border: 1px solid var(--panel-border);
+      border-radius: 8px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .step-control {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+
+    .step-btn {
+      background: #2a2a2a;
+      color: #fff;
+      border: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-group-row { display: flex; gap: 4px; align-items: center; }
+
+    .ctrl-btn {
+      background: #2a2a2a;
+      border: 1px solid #3a3a3a;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      min-width: 32px;
+      text-align: center;
+    }
+
+    .ctrl-btn:active { background: var(--panel-accent); color: #000; }
+
+    .dpad {
+      display: grid;
+      grid-template-columns: repeat(3, 30px);
+      grid-template-rows: repeat(2, 28px);
+      gap: 3px;
+      justify-content: center;
+    }
+
+    /* RÈGLES D'IMPRESSION (SEUL LE FORMAT A4 SERA IMPRIMÉ) */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+      }
+
+      header, 
+      .sidebar, 
+      .control-panel-fixed, 
+      .canvas-handle {
+        display: none !important;
+      }
+
+      .zoom-viewport {
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        display: block !important;
+      }
+
+      .workspace-scaler {
+        transform: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        gap: 0 !important;
+      }
+
+      .a4-container {
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        width: 100% !important;
+        min-height: 100vh !important;
+        margin: 0 !important;
+        padding: 15mm 15mm !important;
+        page-break-after: always;
+        break-after: page;
+      }
+
+      .draggable-canvas-container {
+        border: none !important;
+        box-shadow: none !important;
+      }
+
+      .watermark-overlay, .imported-img, .inserted-shape {
+        border: none !important;
+        outline: none !important;
+      }
+    }
+  </style>
+</head>
+<body data-theme="default">
+
+  <header>
+    <div class="header-left">
+      <button class="burger-btn" id="burgerBtn" onclick="toggleSidebar(event)">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="logo">📄 ATHEMIX37 ESPACE CRÉATION</div>
+    </div>
+    
+    <div class="zoom-controls">
+      <button class="zoom-btn" onclick="applyZoom(-0.1)">🔍 -</button>
+      <span class="zoom-display" id="zoomLevel">100%</span>
+      <button class="zoom-btn" onclick="applyZoom(0.1)">🔍 +</button>
+      <button class="zoom-btn" onclick="resetZoom()">🎯 100%</button>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn-3d" onclick="imprimerPDF()">🖨️ PDF</button>
+      <button class="btn-3d" onclick="alert('Sauvegardé !')" style="color: var(--accent-primary);">💾 Sauver</button>
+    </div>
+  </header>
+
+  <!-- MENU LATÉRAL RECONFIGURÉ ET ENRICHI -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- GROUPE : FORMATAGE DU TEXTE ET COULEURS -->
+    <div class="menu-group">
+      <div class="menu-title">✍️ Formatage Texte & Titres</div>
+      
+      <div class="btn-inline-group">
+        <button class="btn-3d" onclick="formatText('bold')" title="Gras"><b>B</b></button>
+        <button class="btn-3d" onclick="formatText('italic')" title="Italique"><i>I</i></button>
+        <button class="btn-3d" onclick="formatText('underline')" title="Souligné"><u>U</u></button>
+        <button class="btn-3d" onclick="formatText('strikeThrough')" title="Barré"><s>S</s></button>
+      </div>
+
+      <div class="color-picker-row">
+        <label for="textColorPicker">🎨 Couleur Texte / Titre :</label>
+        <input type="color" id="textColorPicker" value="#2563eb" onchange="applyTextColor(this.value)">
+      </div>
+
+      <div class="color-picker-row">
+        <label for="bgColorPicker">🖍️ Surligner / Fond :</label>
+        <input type="color" id="bgColorPicker" value="#fef08a" onchange="applyBgColor(this.value)">
+      </div>
+
+      <select class="custom-select" onchange="applyFontSize(this.value)">
+        <option value="" disabled selected>-- Taille du texte / Titre --</option>
+        <option value="7">Grand Titre (H1)</option>
+        <option value="6">Sous-titre (H2)</option>
+        <option value="5">Titre de section (H3)</option>
+        <option value="3">Texte Normal</option>
+        <option value="1">Petit Texte / Annotation</option>
+      </select>
+
+      <select class="custom-select" onchange="applyFontName(this.value)">
+        <option value="" disabled selected>-- Police de caractères --</option>
+        <option value="Segoe UI">Segoe UI (Par défaut)</option>
+        <option value="Times New Roman">Times New Roman (Soutenu)</option>
+        <option value="Arial">Arial (Moderne)</option>
+        <option value="Courier New">Courier New (Code / Machine)</option>
+        <option value="Comic Sans MS">Comic Sans MS (Manuscrit)</option>
+        <option value="Georgia">Georgia (Élégant)</option>
+      </select>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-title">📄 Gestion Multi-Pages</div>
+      <button class="btn-3d" onclick="ajouterPageA4()">➕ Ajouter une Page A4</button>
+      <button class="btn-3d" onclick="setPaperStyle('lined')">📝 Feuille à Lignes</button>
+      <button class="btn-3d" onclick="setPaperStyle('blank')">⬜ Feuille Blanche Unie</button>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-title">🖼️ Importer un Schéma / Photo</div>
+      <input type="file" id="imageLoader" accept="image/*" class="custom-input" onchange="importerImage(event)">
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-title">🛡️ Filigrane (Facultatif)</div>
+      <button class="btn-3d" onclick="toggleWatermark(true)" style="color: var(--accent-primary);">➕ Ajouter Filigrane</button>
+      <button class="btn-3d" onclick="toggleWatermark(false)" style="color: #ef4444;">🗑️ Masquer / Supprimer</button>
+      <input type="text" class="custom-input" id="watermarkInput" placeholder="Texte du filigrane..." value="CORRECTION OFFICIELLE" oninput="updateWatermarkText()">
+      <input type="color" id="watermarkColor" value="#2563eb" class="custom-input" style="height:40px; padding:2px;" onchange="updateWatermarkColor()">
+    </div>
+
+    <!-- OPTION DES SCHÉMAS ET FORMES INTÉGRÉE D'APRÈS L'IMAGE -->
+    <div class="menu-group">
+      <div class="menu-title menu-title-toggle" onclick="toggleShapesAccordion()">
+        <span>📐 Outils de Schéma & Tracé</span>
+        <span id="accordionArrow">▼</span>
+      </div>
+
+      <!-- Grille visuelle dépliante de TOUTES les formes et symboles -->
+      <div class="shapes-accordion-content" id="shapesAccordion">
+        <!-- Lignes -->
+        <div class="shape-card-item" onclick="selectShapeTool('line')"><div class="shape-card-icon">📏</div><div>Trait Plein</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('dashed')"><div class="shape-card-icon">┈</div><div>Pointillés</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('dashdot')"><div class="shape-card-icon">∿</div><div>Trait Mixte</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('arrow')"><div class="shape-card-icon">➔</div><div>Flèche</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('double_arrow')"><div class="shape-card-icon">↔</div><div>Double Flèche</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('curve')"><div class="shape-card-icon">↪</div><div>Ligne Courbe</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('freehand')"><div class="shape-card-icon">✏️</div><div>Dessin Libre</div></div>
+
+        <!-- Rectangles -->
+        <div class="shape-card-item" onclick="selectShapeTool('rect')"><div class="shape-card-icon">🔲</div><div>Rectangle</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('round_rect')"><div class="shape-card-icon">▢</div><div>Rect. Arrondi</div></div>
+
+        <!-- Formes de base -->
+        <div class="shape-card-item" onclick="selectShapeTool('circle')"><div class="shape-card-icon">⚪</div><div>Cercle / Oval</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('triangle')"><div class="shape-card-icon">🔺</div><div>Triangle</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('diamond')"><div class="shape-card-icon">🔷</div><div>Losange / Condition</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('trapezoid')"><div class="shape-card-icon">⏢</div><div>Trapèze</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('parallelogram')"><div class="shape-card-icon">▱</div><div>Parallélogramme</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('star')"><div class="shape-card-icon">⭐</div><div>Étoile</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('cross')"><div class="shape-card-icon">➕</div><div>Croix</div></div>
+
+        <!-- Flèches pleines -->
+        <div class="shape-card-item" onclick="selectShapeTool('arrow_right')"><div class="shape-card-icon">➡</div><div>Flèche Droite</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('arrow_left')"><div class="shape-card-icon">⬅</div><div>Flèche Gauche</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('arrow_up')"><div class="shape-card-icon">⬆</div><div>Flèche Haut</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('arrow_down')"><div class="shape-card-icon">⬇</div><div>Flèche Bas</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('arrow_4way')"><div class="shape-card-icon">✢</div><div>Flèche 4-Voies</div></div>
+
+        <!-- Organigrammes -->
+        <div class="shape-card-item" onclick="selectShapeTool('flow_process')"><div class="shape-card-icon">▭</div><div>Processus</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('flow_decision')"><div class="shape-card-icon">◇</div><div>Décision</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('flow_terminator')"><div class="shape-card-icon">⬭</div><div>Début / Fin</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('flow_data')"><div class="shape-card-icon">▱</div><div>Données (E/S)</div></div>
+
+        <!-- Bulles & Légendes -->
+        <div class="shape-card-item" onclick="selectShapeTool('callout_rect')"><div class="shape-card-icon">💬</div><div>Bulle Rectangulaire</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('callout_cloud')"><div class="shape-card-icon">💭</div><div>Bulle Nuage</div></div>
+
+        <!-- Illustrations & Modèles Word -->
+        <div class="shape-card-item" onclick="selectShapeTool('smartart')"><div class="shape-card-icon">📊</div><div>SmartArt Bloc</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('chart_bar')"><div class="shape-card-icon">📈</div><div>Graphique Bâtons</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('icon_symbol')"><div class="shape-card-icon">💡</div><div>Icône / Symbole</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('model_3d')"><div class="shape-card-icon">🧊</div><div>Modèle 3D Cube</div></div>
+
+        <!-- Électrotechnique & Physique -->
+        <div class="shape-card-item" onclick="selectShapeTool('resistor')"><div class="shape-card-icon">⚡</div><div>Résistance</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('capacitor')"><div class="shape-card-icon">⏸️</div><div>Condensateur</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('inductor')"><div class="shape-card-icon">🌀</div><div>Bobine</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('source')"><div class="shape-card-icon">🔋</div><div>Source / Pile</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('ground')"><div class="shape-card-icon">⏚</div><div>Masse / Terre</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('switch')"><div class="shape-card-icon">⎘</div><div>Interrupteur</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('motor')"><div class="shape-card-icon">Ⓞ</div><div>Moteur</div></div>
+      </div>
+
+      <select class="custom-select" id="toolSelect" onchange="selectShapeTool(this.value)">
+        <optgroup label="── Lignes & Traits ──">
+          <option value="line">📏 Trait Plein Continu</option>
+          <option value="dashed">┈ Trait Pointillé</option>
+          <option value="dashdot">∿ Trait Mixte</option>
+          <option value="arrow">➔ Flèche Simple</option>
+          <option value="double_arrow">↔ Double Flèche (Cote)</option>
+          <option value="curve">↪ Ligne Courbe / Arc</option>
+          <option value="freehand">✏️ Tracé Libre / Stylet</option>
+        </optgroup>
+
+        <optgroup label="── Rectangles & Formes de Base ──">
+          <option value="rect">🔲 Rectangle / Carré</option>
+          <option value="round_rect">▢ Rectangle Arrondi</option>
+          <option value="circle">⚪ Cercle / Ellipse</option>
+          <option value="triangle">🔺 Triangle</option>
+          <option value="diamond">🔷 Losange</option>
+          <option value="trapezoid">⏢ Trapèze</option>
+          <option value="parallelogram">▱ Parallélogramme</option>
+          <option value="star">⭐ Étoile</option>
+          <option value="cross">➕ Croix</option>
+        </optgroup>
+
+        <optgroup label="── Flèches Pleines ──">
+          <option value="arrow_right">➡ Flèche Droite</option>
+          <option value="arrow_left">⬅ Flèche Gauche</option>
+          <option value="arrow_up">⬆ Flèche Haut</option>
+          <option value="arrow_down">⬇ Flèche Bas</option>
+          <option value="arrow_4way">✢ Flèche 4-Voies / Quadruple</option>
+        </optgroup>
+
+        <optgroup label="── Organigrammes & Schémas ──">
+          <option value="flow_process">▭ Processus (Rectangle)</option>
+          <option value="flow_decision">◇ Condition / Décision</option>
+          <option value="flow_terminator">⬭ Début / Fin (Ellipse)</option>
+          <option value="flow_data">▱ Entrée / Sortie (Données)</option>
+        </optgroup>
+
+        <optgroup label="── Bulles & Légendes ──">
+          <option value="callout_rect">💬 Bulle de Légende Rectangulaire</option>
+          <option value="callout_cloud">💭 Bulle de Légende Nuage</option>
+        </optgroup>
+
+        <optgroup label="── Illustrations & Modèles Word ──">
+          <option value="smartart">📊 Bloc SmartArt / Organigramme</option>
+          <option value="chart_bar">📈 Graphique Historigramme</option>
+          <option value="icon_symbol">💡 Icône / Pictogramme</option>
+          <option value="model_3d">🧊 Modèle 3D Isométrique</option>
+        </optgroup>
+
+        <optgroup label="── Électrotechnique & Physique ──">
+          <option value="resistor">⚡ Résistance</option>
+          <option value="capacitor">⏸️ Condensateur</option>
+          <option value="inductor">🌀 Bobine / Inductance</option>
+          <option value="source">🔋 Source de Tension (Pile)</option>
+          <option value="ground">⏚ Masse / Terre</option>
+          <option value="switch">⎘ Interrupteur Ouvert</option>
+          <option value="motor">Ⓞ Moteur (M)</option>
+        </optgroup>
+      </select>
+      <button class="btn-3d" onclick="effacerCanvas()" style="color: #ef4444;">🗑️ Vider le Dessin</button>
+      <button class="btn-3d" onclick="supprimerElementSelectionne()" style="color: #ef4444;">❌ Supprimer Forme Sélectionnée</button>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-title">🔢 Symboles</div>
+      <select class="custom-select" onchange="insererSymbolSelect(this)">
+        <option value="" disabled selected>-- Insérer un symbole --</option>
+        <option value="π">π (Pi)</option>
+        <option value="∞">∞ (Infini)</option>
+        <option value="√">√ (Racine)</option>
+        <option value="∑">∑ (Somme)</option>
+        <option value="∫">∫ (Intégrale)</option>
+        <option value="Δ">Δ (Delta)</option>
+        <option value="Ω">Ω (Ohm)</option>
+        <option value="µ">µ (Micro)</option>
+        <option value="λ">λ (Lambda)</option>
+        <option value="θ">θ (Theta)</option>
+      </select>
+      <button class="btn-3d" onclick="insererFraction()">➕ Insérer Fraction (a/b)</button>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-title">🎨 Thèmes</div>
+      <button class="btn-3d" onclick="setTheme('default')">💧 Bleu Doux</button>
+      <button class="btn-3d" onclick="setTheme('mint')">🍃 Menthe Léger</button>
+      <button class="btn-3d" onclick="setTheme('lavender')">🌸 Lavande</button>
+      <button class="btn-3d" onclick="setTheme('sand')">🌾 Sable</button>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-title">⚙️ Cadran Schéma</div>
+      <button class="btn-3d" onclick="afficherCadran()">➕ Afficher Cadran libre</button>
+      <button class="btn-3d" onclick="masquerCadran()" style="color: #ef4444;">❌ Masquer Cadran</button>
+    </div>
+  </aside>
+
+  <!-- CONTENEUR DU ZOOM ACTIF -->
+  <div class="zoom-viewport" id="zoomViewport">
+    <div class="workspace-scaler" id="workspaceScaler">
+      
+      <!-- PAGE A4 N°1 -->
+      <div class="a4-container lined" id="a4Page">
+        
+        <div class="watermark-overlay" id="watermark" onclick="selectElement(this)">CORRECTION OFFICIELLE</div>
+
+        <div class="a4-header">
+          <div class="a4-header-row">
+            <input type="text" placeholder="Matière (ex: Physique / Dessin Technique)">
+            <input type="text" placeholder="Classe">
+            <input type="text" placeholder="Date: JJ/MM/AAAA">
+          </div>
+          <div class="a4-header-row">
+            <input type="text" class="author-field" placeholder="Correcteur / Auteur">
+          </div>
+        </div>
+
+        <div class="draggable-canvas-container" id="draggableCanvas">
+          <div class="canvas-handle" id="canvasHandle">
+            <span>✋ Déplacer le cadran</span>
+            <span class="tool-badge" id="toolBadge">Outil : Trait Plein</span>
+            <span style="cursor: pointer; font-size: 1rem;" onclick="masquerCadran()">❌</span>
+          </div>
+          <canvas id="schemaCanvas"></canvas>
+        </div>
+
+        <!-- Zone d'édition -->
+        <div class="a4-editor" id="editor" contenteditable="true" onclick="positionnerCurseurDirect(event)">Toucher ici pour commencer à écrire...</div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PANNEAU DE CONTRÔLE FIXÉ EN BAS -->
+  <div class="control-panel-fixed">
+    <div class="panel-header">
+      <span>🎮 PANNEAU DE CONTRÔLE ACTIF</span>
+      <span style="font-size:0.7rem; color:#94a3b8;">Cliquez sur un élément pour l'ajuster</span>
+    </div>
+
+    <div class="panel-grid">
+      <div class="panel-box">
+        <div class="step-control">
+          Pas: <button class="step-btn" onclick="adjStep('move', -1)">-</button>
+          <span id="step-move">3</span>
+          <button class="step-btn" onclick="adjStep('move', 1)">+</button>
+        </div>
+        <div class="dpad">
+          <div></div>
+          <button class="ctrl-btn" onclick="moveElement(0, -1)">▲</button>
+          <div></div>
+          <button class="ctrl-btn" onclick="moveElement(-1, 0)">◄</button>
+          <button class="ctrl-btn" onclick="moveElement(0, 1)">▼</button>
+          <button class="ctrl-btn" onclick="moveElement(1, 0)">►</button>
+        </div>
+      </div>
+
+      <div class="panel-box">
+        <div class="step-control">
+          Pas (Larg): <button class="step-btn" onclick="adjStep('width', -1)">-</button>
+          <span id="step-width">4</span>
+          <button class="step-btn" onclick="adjStep('width', 1)">+</button>
+        </div>
+        <div class="btn-group-row">
+          <button class="ctrl-btn" onclick="resizeWidth(-1)">—</button>
+          <button class="ctrl-btn">↔</button>
+          <button class="ctrl-btn" onclick="resizeWidth(1)">+</button>
+        </div>
+      </div>
+
+      <div class="panel-box">
+        <div class="step-control">
+          Pas (Haut): <button class="step-btn" onclick="adjStep('height', -1)">-</button>
+          <span id="step-height">4</span>
+          <button class="step-btn" onclick="adjStep('height', 1)">+</button>
+        </div>
+        <div class="btn-group-row">
+          <button class="ctrl-btn" onclick="resizeHeight(-1)">—</button>
+          <button class="ctrl-btn">↕</button>
+          <button class="ctrl-btn" onclick="resizeHeight(1)">+</button>
+        </div>
+      </div>
+
+      <div class="panel-box">
+        <div class="step-control">
+          Pas (Opac): <button class="step-btn" onclick="adjStep('opac', -1)">-</button>
+          <span id="step-opac">5</span>
+          <button class="step-btn" onclick="adjStep('opac', 1)">+</button>
+        </div>
+        <div class="btn-group-row">
+          <button class="ctrl-btn" onclick="adjustOpacity(-1)">—</button>
+          <button class="ctrl-btn">☉</button>
+          <button class="ctrl-btn" onclick="adjustOpacity(1)">+</button>
+        </div>
+      </div>
+
+      <div class="panel-box">
+        <div class="step-control">
+          Pas (Rot): <button class="step-btn" onclick="adjStep('rot', -1)">-</button>
+          <span id="step-rot">2</span>
+          <button class="step-btn" onclick="adjStep('rot', 1)">+</button>
+        </div>
+        <div class="btn-group-row">
+          <button class="ctrl-btn" onclick="rotateElement(-1)">⟲</button>
+          <button class="ctrl-btn" onclick="resetTransforms()">⚙</button>
+          <button class="ctrl-btn" onclick="rotateElement(1)">⟳</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const burgerBtn = document.getElementById('burgerBtn');
+    const zoomViewport = document.getElementById('zoomViewport');
+    const workspaceScaler = document.getElementById('workspaceScaler');
+    const zoomLevelDisplay = document.getElementById('zoomLevel');
+    const canvas = document.getElementById('schemaCanvas');
+    const ctx = canvas.getContext('2d');
+    const dragContainer = document.getElementById('draggableCanvas');
+    const dragHandle = document.getElementById('canvasHandle');
+    const toolBadge = document.getElementById('toolBadge');
+
+    let selectedEl = null;
+
+    /* DÉFINITION DES SVG DE GRAPHES/SCHÉMAS DÉPLAÇABLES DIRECTEMENT SUR LE DOCUMENT */
+    const SVG_TEMPLATES = {
+      // Électrotechnique
+      resistor: `<svg viewBox="0 0 100 40"><line x1="0" y1="20" x2="20" y2="20" stroke="#000" stroke-width="3"/><rect x="20" y="5" width="60" height="30" fill="none" stroke="#000" stroke-width="3"/><line x1="80" y1="20" x2="100" y2="20" stroke="#000" stroke-width="3"/></svg>`,
+      capacitor: `<svg viewBox="0 0 100 40"><line x1="0" y1="20" x2="42" y2="20" stroke="#000" stroke-width="3"/><line x1="42" y1="5" x2="42" y2="35" stroke="#000" stroke-width="3"/><line x1="58" y1="5" x2="58" y2="35" stroke="#000" stroke-width="3"/><line x1="58" y1="20" x2="100" y2="20" stroke="#000" stroke-width="3"/></svg>`,
+      inductor: `<svg viewBox="0 0 100 40"><line x1="0" y1="20" x2="10" y2="20" stroke="#000" stroke-width="3"/><path d="M 10,20 Q 20,0 30,20 Q 40,0 50,20 Q 60,0 70,20 Q 80,0 90,20" fill="none" stroke="#000" stroke-width="3"/><line x1="90" y1="20" x2="100" y2="20" stroke="#000" stroke-width="3"/></svg>`,
+      source: `<svg viewBox="0 0 100 40"><line x1="0" y1="20" x2="40" y2="20" stroke="#000" stroke-width="3"/><line x1="40" y1="5" x2="40" y2="35" stroke="#000" stroke-width="4"/><line x1="60" y1="12" x2="60" y2="28" stroke="#000" stroke-width="2"/><line x1="60" y1="20" x2="100" y2="20" stroke="#000" stroke-width="3"/><text x="25" y="15" font-size="14" font-weight="bold">+</text></svg>`,
+      ground: `<svg viewBox="0 0 60 60"><line x1="30" y1="0" x2="30" y2="30" stroke="#000" stroke-width="3"/><line x1="10" y1="30" x2="50" y2="30" stroke="#000" stroke-width="4"/><line x1="20" y1="40" x2="40" y2="40" stroke="#000" stroke-width="3"/><line x1="25" y1="50" x2="35" y2="50" stroke="#000" stroke-width="2"/></svg>`,
+      switch: `<svg viewBox="0 0 100 40"><line x1="0" y1="20" x2="20" y2="20" stroke="#000" stroke-width="3"/><circle cx="20" cy="20" r="4" fill="#000"/><line x1="20" y1="20" x2="75" y2="5" stroke="#000" stroke-width="3"/><circle cx="80" cy="20" r="4" fill="#000"/><line x1="80" y1="20" x2="100" y2="20" stroke="#000" stroke-width="3"/></svg>`,
+      motor: `<svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="30" fill="none" stroke="#000" stroke-width="3"/><text x="40" y="48" font-size="24" font-weight="bold" text-anchor="middle">M</text><line x1="0" y1="40" x2="10" y2="40" stroke="#000" stroke-width="3"/><line x1="70" y1="40" x2="80" y2="40" stroke="#000" stroke-width="3"/></svg>`,
+      
+      // Traits & Flèches
+      line: `<svg viewBox="0 0 120 20"><line x1="0" y1="10" x2="120" y2="10" stroke="#000" stroke-width="3"/></svg>`,
+      dashed: `<svg viewBox="0 0 120 20"><line x1="0" y1="10" x2="120" y2="10" stroke="#000" stroke-width="3" stroke-dasharray="6,6"/></svg>`,
+      dashdot: `<svg viewBox="0 0 120 20"><line x1="0" y1="10" x2="120" y2="10" stroke="#000" stroke-width="3" stroke-dasharray="10,4,2,4"/></svg>`,
+      arrow: `<svg viewBox="0 0 120 20"><defs><marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#000"/></marker></defs><line x1="0" y1="10" x2="110" y2="10" stroke="#000" stroke-width="3" marker-end="url(#arr)"/></svg>`,
+      double_arrow: `<svg viewBox="0 0 120 20"><defs><marker id="arr2" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#000"/></marker></defs><line x1="10" y1="10" x2="110" y2="10" stroke="#000" stroke-width="3" marker-start="url(#arr2)" marker-end="url(#arr2)"/></svg>`,
+      arrow_right: `<svg viewBox="0 0 100 40"><path d="M 0 10 L 60 10 L 60 0 L 100 20 L 60 40 L 60 30 L 0 30 Z" fill="#000"/></svg>`,
+      arrow_left: `<svg viewBox="0 0 100 40"><path d="M 100 10 L 40 10 L 40 0 L 0 20 L 40 40 L 40 30 L 100 30 Z" fill="#000"/></svg>`,
+      arrow_up: `<svg viewBox="0 0 40 100"><path d="M 10 100 L 10 40 L 0 40 L 20 0 L 40 40 L 30 40 L 30 100 Z" fill="#000"/></svg>`,
+      arrow_down: `<svg viewBox="0 0 40 100"><path d="M 10 0 L 10 60 L 0 60 L 20 100 L 40 60 L 30 60 L 30 0 Z" fill="#000"/></svg>`,
+      curve: `<svg viewBox="0 0 100 60"><path d="M 10 50 Q 50 0 90 50" stroke="#000" stroke-width="3" fill="none"/></svg>`,
+
+      // Formes Géométriques & Organigrammes (Grafcet)
+      rect: `<svg viewBox="0 0 100 60"><rect x="3" y="3" width="94" height="54" fill="none" stroke="#000" stroke-width="3"/></svg>`,
+      round_rect: `<svg viewBox="0 0 100 60"><rect x="3" y="3" width="94" height="54" rx="10" fill="none" stroke="#000" stroke-width="3"/></svg>`,
+      circle: `<svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="#000" stroke-width="3"/></svg>`,
+      triangle: `<svg viewBox="0 0 80 80"><polygon points="40,4 76,76 4,76" fill="none" stroke="#000" stroke-width="3"/></svg>`,
+      diamond: `<svg viewBox="0 0 100 60"><polygon points="50,3 97,30 50,57 3,30" fill="none" stroke="#000" stroke-width="3"/></svg>`,
+      trapezoid: `<svg viewBox="0 0 100 60"><polygon points="20,3 80,3 97,57 3,57" fill="none" stroke="#000" stroke-width="3"/></svg>`,
+      parallelogram: `<svg viewBox="0 0 100 60"><polygon points="20,3 97,3 80,57 3,57" fill="none" stroke="#000" stroke-width="3"/></svg>`,
+      star: `<svg viewBox="0 0 80 80"><polygon points="40,2 51,25 78,28 58,46 64,73 40,59 16,73 22,46 2,28 29,25" fill="none" stroke="#000" stroke-width="3"/></svg>`,
+      cross: `<svg viewBox="0 0 80 80"><polygon points="28,2 52,2 52,28 78,28 78,52 52,52 52,78 28,78 28,52 2,52 2,28 28,28" fill="none" stroke="#000" stroke-width="3"/></svg>`,
+
+      flow_process: `<svg viewBox="0 0 100 50"><rect x="3" y="3" width="94" height="44" fill="none" stroke="#000" stroke-width="3"/></svg>`,
+      flow_decision: `<svg viewBox="0 0 100 60"><polygon points="50,3 97,30 50,57 3,30" fill="none" stroke="#000" stroke-width="3"/></svg>`,
+      flow_terminator: `<svg viewBox="0 0 100 50"><rect x="3" y="3" width="94" height="44" rx="22" fill="none" stroke="#000" stroke-width="3"/></svg>`,
+      flow_data: `<svg viewBox="0 0 100 50"><polygon points="15,3 97,3 85,47 3,47" fill="none" stroke="#000" stroke-width="3"/></svg>`,
+      callout_rect: `<svg viewBox="0 0 100 70"><path d="M 3 3 L 97 3 L 97 47 L 40 47 L 20 67 L 25 47 L 3 47 Z" fill="none" stroke="#000" stroke-width="3"/></svg>`,
+      callout_cloud: `<svg viewBox="0 0 100 70"><path d="M 20 40 Q 10 20 30 10 Q 50 0 70 10 Q 90 20 80 40 Q 95 55 70 60 Q 50 65 30 60 Q 5 55 20 40 Z" fill="none" stroke="#000" stroke-width="3"/></svg>`
+    };
+
+    /* FONCTION POUR DÉPLIER / REPLIER LE MENU DE FORMES */
+    function toggleShapesAccordion() {
+      const accordion = document.getElementById('shapesAccordion');
+      const arrow = document.getElementById('accordionArrow');
+      accordion.classList.toggle('open');
+      arrow.textContent = accordion.classList.contains('open') ? '▲' : '▼';
+    }
+
+    /* SELECTION DE FORME ET INSERTION DIRECTE SUR LE DOCUMENT */
+    function selectShapeTool(toolKey) {
+      document.querySelectorAll('.shape-card-item').forEach(card => card.classList.remove('active'));
+      setTool(toolKey);
+      document.getElementById('toolSelect').value = toolKey;
+
+      if (SVG_TEMPLATES[toolKey]) {
+        insererFormeInsee(toolKey);
+      } else {
+        afficherCadran();
+      }
+    }
+
+    /* INSERER UNE FORME SVG DIRECTEMENT SUR LE DOCUMENT A4 ET RENDRE INTERACTIVE */
+    function insererFormeInsee(toolKey) {
+      const currentPage = document.getElementById('a4Page');
+      const container = document.createElement('div');
+      container.className = 'inserted-shape';
+      container.innerHTML = SVG_TEMPLATES[toolKey] || SVG_TEMPLATES.rect;
+
+      // Position par défaut au milieu
+      container.style.width = '100px';
+      container.style.height = '60px';
+      container.style.top = (250 + (document.querySelectorAll('.inserted-shape').length * 15)) + 'px';
+      container.style.left = '320px';
+
+      currentPage.appendChild(container);
+
+      // Gestion des événements
+      makeElementInteractive(container);
+      selectElement(container);
+    }
+
+    /* RENDRE N'IMPORTE QUEL ÉLÉMENT GLISSABLE AU DOIGT/SOURIS SUR LE DOCUMENT */
+    function makeElementInteractive(el) {
+      let isDragging = false;
+      let startTouchX = 0, startTouchY = 0;
+      let initialLeft = 0, initialTop = 0;
+
+      function onStart(e) {
+        selectElement(el);
+        isDragging = true;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        startTouchX = clientX;
+        startTouchY = clientY;
+        initialLeft = el.offsetLeft;
+        initialTop = el.offsetTop;
+        e.stopPropagation();
+      }
+
+      function onMove(e) {
+        if (!isDragging) return;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const dx = (clientX - startTouchX) / currentZoom;
+        const dy = (clientY - startTouchY) / currentZoom;
+
+        el.style.left = (initialLeft + dx) + 'px';
+        el.style.top = (initialTop + dy) + 'px';
+        e.preventDefault();
+      }
+
+      function onEnd() {
+        isDragging = false;
+      }
+
+      el.addEventListener('mousedown', onStart);
+      el.addEventListener('touchstart', onStart, { passive: false });
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('touchmove', onMove, { passive: false });
+      document.addEventListener('mouseup', onEnd);
+      document.addEventListener('touchend', onEnd);
+    }
+
+    function supprimerElementSelectionne() {
+      if (selectedEl && (selectedEl.classList.contains('inserted-shape') || selectedEl.classList.contains('imported-img'))) {
+        selectedEl.remove();
+        selectedEl = null;
+      }
+    }
+
+    /* FONCTIONS DE FORMATAGE DE TEXTE DU VOLET LATÉRAL */
+    function formatText(command, value = null) {
+      document.execCommand(command, false, value);
+    }
+
+    function applyTextColor(color) {
+      document.execCommand('foreColor', false, color);
+    }
+
+    function applyBgColor(color) {
+      document.execCommand('hiliteColor', false, color);
+    }
+
+    function applyFontSize(size) {
+      if(size) document.execCommand('fontSize', false, size);
+    }
+
+    function applyFontName(font) {
+      if(font) document.execCommand('fontName', false, font);
+    }
+
+    /* FONCTION D'IMPRESSION PROPRE */
+    function imprimerPDF() {
+      if (selectedEl) {
+        selectedEl.classList.remove('selected');
+        selectedEl = null;
+      }
+      window.print();
+    }
+
+    /* POSITIONNEMENT DU CURSEUR LÀ OÙ ON APPUIT SUR L'ÉCRAN */
+    function positionnerCurseurDirect(e) {
+      const editor = e.currentTarget;
+      
+      if (editor.innerText.trim() === "Toucher ici pour commencer à écrire...") {
+        editor.innerText = "";
+      }
+
+      const rect = editor.getBoundingClientRect();
+      const clickY = e.clientY - rect.top;
+      const lineHeight = 28;
+      const targetLine = Math.floor(clickY / lineHeight);
+
+      let currentLines = editor.innerText.split('\n').length;
+
+      if (targetLine >= currentLines) {
+        let missingLines = targetLine - currentLines + 1;
+        for (let i = 0; i < missingLines; i++) {
+          editor.innerText += '\n';
+        }
+      }
+
+      let range, sel;
+      if (document.caretRangeFromPoint) {
+        range = document.caretRangeFromPoint(e.clientX, e.clientY);
+      } else if (e.rangeParent) {
+        range = document.createRange();
+        range.setStart(e.rangeParent, e.rangeOffset);
+      }
+
+      if (range) {
+        sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    }
+
+    /* GESTION FERMETURE DU MENU LATÉRAL */
+    function toggleSidebar(e) {
+      if (e) e.stopPropagation();
+      sidebar.classList.toggle('open');
+    }
+
+    document.addEventListener('click', (e) => {
+      if (sidebar.classList.contains('open') && 
+          !sidebar.contains(e.target) && 
+          !burgerBtn.contains(e.target)) {
+        sidebar.classList.remove('open');
+      }
+    });
+
+    /* GESTION DU FILIGRANE */
+    function toggleWatermark(show) {
+      const wm = document.getElementById('watermark');
+      if (show) {
+        wm.classList.add('active');
+        makeElementInteractive(wm);
+        selectElement(wm);
+      } else {
+        wm.classList.remove('active');
+        wm.classList.remove('selected');
+        if (selectedEl === wm) selectedEl = null;
+      }
+    }
+
+    /* GESTION DU ZOOM GLOBAL */
+    let currentZoom = 1.0;
+    const minZoom = 0.3;
+    const maxZoom = 2.5;
+
+    function updateZoomUI() {
+      workspaceScaler.style.transform = `scale(${currentZoom})`;
+      zoomLevelDisplay.textContent = `${Math.round(currentZoom * 100)}%`;
+    }
+
+    function applyZoom(delta) {
+      currentZoom = Math.min(maxZoom, Math.max(minZoom, currentZoom + delta));
+      updateZoomUI();
+    }
+
+    function resetZoom() {
+      const screenW = window.innerWidth;
+      if (screenW < 800) {
+        currentZoom = (screenW - 20) / 800;
+      } else {
+        currentZoom = 1.0;
+      }
+      updateZoomUI();
+    }
+
+    /* ZOOM PINCH TACTILE */
+    let initialTouchDistance = 0;
+    let initialZoomOnTouch = 1.0;
+
+    zoomViewport.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        initialTouchDistance = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        initialZoomOnTouch = currentZoom;
+      }
+    }, { passive: true });
+
+    zoomViewport.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2) {
+        const currentDistance = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        if (initialTouchDistance > 0) {
+          const factor = currentDistance / initialTouchDistance;
+          currentZoom = Math.min(maxZoom, Math.max(minZoom, initialZoomOnTouch * factor));
+          updateZoomUI();
+        }
+      }
+    }, { passive: true });
+
+    window.addEventListener('load', () => {
+      resetZoom();
+      fitCanvasSize();
+    });
+
+    /* GESTION DE L'ÉLÉMENT SÉLECTIONNÉ */
+    let state = { x: 0, y: 0, fontSize: 64, opacity: 1, rotation: 0 };
+    let steps = { move: 3, width: 4, height: 4, opac: 5, rot: 2 };
+
+    function selectElement(el) {
+      document.querySelectorAll('.watermark-overlay, .imported-img, .inserted-shape').forEach(e => e.classList.remove('selected'));
+      selectedEl = el;
+      if (selectedEl) {
+        selectedEl.classList.add('selected');
+        state.rotation = getRotationAngle(selectedEl);
+      }
+    }
+
+    function getRotationAngle(target) {
+      const tr = window.getComputedStyle(target).getPropertyValue("transform");
+      if (tr === 'none' || !tr) return 0;
+      const values = tr.split('(')[1].split(')')[0].split(',');
+      const a = values[0];
+      const b = values[1];
+      return Math.round(Math.atan2(b, a) * (180/Math.PI));
+    }
+
+    function adjStep(type, val) {
+      steps[type] = Math.max(1, steps[type] + val);
+      document.getElementById('step-' + type).textContent = steps[type];
+    }
+
+    /* DEPLACEMENT VIA D-PAD / PANNEAU DE CONTRÔLE */
+    function moveElement(dx, dy) {
+      if (!selectedEl) return;
+      if (selectedEl.classList.contains('inserted-shape') || selectedEl.classList.contains('imported-img')) {
+        let currentL = selectedEl.offsetLeft || 0;
+        let currentT = selectedEl.offsetTop || 0;
+        selectedEl.style.left = (currentL + dx * steps.move) + 'px';
+        selectedEl.style.top = (currentT + dy * steps.move) + 'px';
+      } else {
+        state.x += dx * steps.move;
+        state.y += dy * steps.move;
+        applyTransforms();
+      }
+    }
+
+    function resizeWidth(dir) {
+      if (!selectedEl) return;
+      let currentW = selectedEl.clientWidth || 100;
+      selectedEl.style.width = Math.max(20, currentW + dir * steps.width * 5) + 'px';
+    }
+
+    function resizeHeight(dir) {
+      if (!selectedEl) return;
+      let currentH = selectedEl.clientHeight || 60;
+      selectedEl.style.height = Math.max(10, currentH + dir * steps.height * 5) + 'px';
+    }
+
+    function adjustOpacity(dir) {
+      if (!selectedEl) return;
+      let currentOp = parseFloat(window.getComputedStyle(selectedEl).opacity) || 1;
+      let newOp = Math.min(1, Math.max(0.05, currentOp + (dir * steps.opac * 0.02)));
+      selectedEl.style.opacity = newOp;
+    }
+
+    function rotateElement(dir) {
+      if (!selectedEl) return;
+      state.rotation += dir * steps.rot * 5;
+      applyTransforms();
+    }
+
+    function resetTransforms() {
+      state.x = 0; state.y = 0; state.rotation = 0; state.opacity = 1;
+      if (selectedEl) {
+        selectedEl.style.opacity = '1';
+        applyTransforms();
+      }
+    }
+
+    function applyTransforms() {
+      if (!selectedEl) return;
+      if (selectedEl.classList.contains('watermark-overlay')) {
+        selectedEl.style.transform = `translate(-50%, -50%) translate(${state.x}px, ${state.y}px) rotate(${state.rotation}deg)`;
+      } else {
+        selectedEl.style.transform = `rotate(${state.rotation}deg)`;
+      }
+    }
+
+    /* IMPORTATION D'IMAGE */
+    function importerImage(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const img = document.createElement('img');
+          img.src = event.target.result;
+          img.className = 'imported-img';
+          document.getElementById('a4Page').appendChild(img);
+          makeElementInteractive(img);
+          selectElement(img);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    /* GESTION MULTI-PAGES */
+    let pageCount = 1;
+    function ajouterPageA4() {
+      pageCount++;
+      const newPage = document.createElement('div');
+      newPage.className = 'a4-container lined';
+      newPage.id = 'a4Page_' + pageCount;
+      newPage.innerHTML = `
+        <div class="a4-header">
+          <div class="a4-header-row">
+            <input type="text" placeholder="Matière">
+            <input type="text" placeholder="Classe">
+            <input type="text" placeholder="Page ${pageCount}">
+          </div>
+        </div>
+        <div class="a4-editor" contenteditable="true" onclick="positionnerCurseurDirect(event)"></div>
+      `;
+      workspaceScaler.appendChild(newPage);
+    }
+
+    function setPaperStyle(style) {
+      document.querySelectorAll('.a4-container').forEach(page => {
+        if (style === 'blank') {
+          page.classList.remove('lined'); page.classList.add('blank');
+        } else {
+          page.classList.remove('blank'); page.classList.add('lined');
+        }
+      });
+    }
+
+    function updateWatermarkText() {
+      document.getElementById('watermark').textContent = document.getElementById('watermarkInput').value;
+    }
+
+    function updateWatermarkColor() {
+      document.getElementById('watermark').style.color = document.getElementById('watermarkColor').value;
+    }
+
+    function setTheme(theme) { document.body.setAttribute('data-theme', theme); }
+    function masquerCadran() { dragContainer.style.display = 'none'; }
+    function afficherCadran() { dragContainer.style.display = 'flex'; fitCanvasSize(); }
+
+    function fitCanvasSize() {
+      canvas.width = dragContainer.clientWidth;
+      canvas.height = dragContainer.clientHeight - 30;
+    }
+
+    /* DESSIN ET FORMES DU CANVAS */
+    let currentTool = 'line';
+    let isDrawing = false;
+    let startX = 0, startY = 0;
+    let pathPoints = [];
+
+    function setTool(tool) {
+      currentTool = tool;
+      const toolNames = { 
+        'line':'Trait Plein', 'dashed':'Pointillés', 'dashdot':'Trait Mixte',
+        'arrow':'Flèche Simple', 'double_arrow':'Double Flèche', 'curve':'Ligne Courbe', 'freehand':'Tracé Libre',
+        'rect':'Rectangle', 'round_rect':'Rect. Arrondi', 'circle':'Cercle / Ellipse', 'triangle':'Triangle',
+        'diamond':'Losange', 'trapezoid':'Trapèze', 'parallelogram':'Parallélogramme', 'star':'Étoile', 'cross':'Croix',
+        'arrow_right':'Flèche Droite', 'arrow_left':'Flèche Gauche', 'arrow_up':'Flèche Haut', 'arrow_down':'Flèche Bas', 'arrow_4way':'Flèche 4-Voies',
+        'flow_process':'Processus', 'flow_decision':'Décision', 'flow_terminator':'Début/Fin', 'flow_data':'Données E/S',
+        'callout_rect':'Bulle Rectangulaire', 'callout_cloud':'Bulle Nuage',
+        'smartart':'SmartArt Bloc', 'chart_bar':'Graphique Bâtons', 'icon_symbol':'Icône', 'model_3d':'Modèle 3D',
+        'resistor':'Résistance', 'capacitor':'Condensateur', 'inductor':'Bobine',
+        'source':'Pile / Source', 'ground':'Masse', 'switch':'Interrupteur', 'motor':'Moteur'
+      };
+      toolBadge.textContent = 'Outil : ' + (toolNames[tool] || tool);
+    }
+
+    function insererSymbolSelect(selectObj) {
+      if (selectObj.value) { insererTexte(selectObj.value); selectObj.selectedIndex = 0; }
+    }
+
+    function insererTexte(text) {
+      const editor = document.getElementById('editor');
+      document.execCommand('insertText', false, text);
+    }
+
+    function insererFraction() {
+      const num = prompt("Numérateur :", "a");
+      const den = prompt("Dénominateur :", "b");
+      if (num && den) insererTexte(`(${num} / ${den})`);
+    }
+
+    /* DEPLACEMENT DU CADRAN */
+    let activeDrag = false, currentX = 0, currentY = 0, initialX = 0, initialY = 0;
+
+    dragHandle.addEventListener("mousedown", dragStart);
+    document.addEventListener("mouseup", dragEnd);
+    document.addEventListener("mousemove", drag);
+    dragHandle.addEventListener("touchstart", dragStart, {passive: false});
+    document.addEventListener("touchend", dragEnd);
+    document.addEventListener("touchmove", drag, {passive: false});
+
+    function dragStart(e) {
+      if (e.touches && e.touches.length > 1) return;
+      const clientX = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
+      const clientY = e.type === "touchstart" ? e.touches[0].clientY : e.clientY;
+      initialX = clientX - currentX; initialY = clientY - currentY;
+      activeDrag = true;
+    }
+
+    function dragEnd() { activeDrag = false; }
+
+    function drag(e) {
+      if (activeDrag) {
+        e.preventDefault();
+        const clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
+        currentX = clientX - initialX; currentY = clientY - initialY;
+        dragContainer.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+      }
+    }
+
+    /* MOTEUR DE DESSIN CANVAS */
+    function getCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return { x: (clientX - rect.left) / currentZoom, y: (clientY - rect.top) / currentZoom };
+    }
+
+    function startDraw(e) {
+      if (e.touches && e.touches.length > 1) return;
+      isDrawing = true;
+      const c = getCoords(e); startX = c.x; startY = c.y;
+      pathPoints = [{x: startX, y: startY}];
+    }
+
+    function drawDuringMove(e) {
+      if (!isDrawing) return;
+      if (currentTool === 'freehand') {
+        const c = getCoords(e);
+        pathPoints.push(c);
+        ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(pathPoints[pathPoints.length - 2].x, pathPoints[pathPoints.length - 2].y);
+        ctx.lineTo(c.x, c.y);
+        ctx.stroke();
+      }
+    }
+
+    function drawArrowHead(x, y, angle) {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x - 10 * Math.cos(angle - Math.PI / 6), y - 10 * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(x - 10 * Math.cos(angle + Math.PI / 6), y - 10 * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function endDraw(e) {
+      if (!isDrawing) return;
+      const c = getCoords(e); const endX = c.x, endY = c.y;
+      const w = endX - startX, h = endY - startY;
+      ctx.strokeStyle = '#0f172a'; ctx.fillStyle = '#0f172a'; ctx.lineWidth = 2;
+      ctx.setLineDash([]);
+      ctx.beginPath();
+
+      if (currentTool === 'line') {
+        ctx.moveTo(startX, startY); ctx.lineTo(endX, endY); ctx.stroke();
+      } 
+      else if (currentTool === 'dashed') {
+        ctx.setLineDash([6, 6]);
+        ctx.moveTo(startX, startY); ctx.lineTo(endX, endY); ctx.stroke();
+      } 
+      else if (currentTool === 'dashdot') {
+        ctx.setLineDash([10, 4, 2, 4]);
+        ctx.moveTo(startX, startY); ctx.lineTo(endX, endY); ctx.stroke();
+      } 
+      else if (currentTool === 'arrow') {
+        ctx.moveTo(startX, startY); ctx.lineTo(endX, endY); ctx.stroke();
+        const angle = Math.atan2(endY - startY, endX - startX);
+        drawArrowHead(endX, endY, angle);
+      } 
+      else if (currentTool === 'double_arrow') {
+        ctx.moveTo(startX, startY); ctx.lineTo(endX, endY); ctx.stroke();
+        const angle = Math.atan2(endY - startY, endX - startX);
+        drawArrowHead(endX, endY, angle);
+        drawArrowHead(startX, startY, angle + Math.PI);
+      } 
+      else if (currentTool === 'curve') {
+        ctx.moveTo(startX, startY);
+        ctx.quadraticCurveTo(startX + w/2, startY - 40, endX, endY);
+        ctx.stroke();
+      }
+      else if (currentTool === 'rect' || currentTool === 'flow_process') {
+        ctx.strokeRect(startX, startY, w, h);
+      } 
+      else if (currentTool === 'round_rect') {
+        let r = 10;
+        ctx.roundRect(startX, startY, w, h, r);
+        ctx.stroke();
+      }
+      else if (currentTool === 'circle') {
+        let r = Math.sqrt(w*w + h*h);
+        ctx.arc(startX, startY, r, 0, 2 * Math.PI); ctx.stroke();
+      } 
+      else if (currentTool === 'flow_terminator') {
+        ctx.ellipse(startX + w/2, startY + h/2, Math.abs(w/2), Math.abs(h/2), 0, 0, 2 * Math.PI);
+        ctx.stroke();
+      }
+      else if (currentTool === 'triangle') {
+        ctx.moveTo(startX + w/2, startY); ctx.lineTo(endX, endY); ctx.lineTo(startX, endY); ctx.closePath(); ctx.stroke();
+      } 
+      else if (currentTool === 'diamond' || currentTool === 'flow_decision') {
+        ctx.moveTo(startX + w/2, startY); ctx.lineTo(endX, startY + h/2);
+        ctx.lineTo(startX + w/2, endY); ctx.lineTo(startX, startY + h/2); ctx.closePath(); ctx.stroke();
+      }
+      else if (currentTool === 'parallelogram' || currentTool === 'flow_data') {
+        let shift = w * 0.2;
+        ctx.moveTo(startX + shift, startY); ctx.lineTo(endX, startY);
+        ctx.lineTo(endX - shift, endY); ctx.lineTo(startX, endY); ctx.closePath(); ctx.stroke();
+      }
+      else if (currentTool === 'trapezoid') {
+        let shift = w * 0.2;
+        ctx.moveTo(startX + shift, startY); ctx.lineTo(endX - shift, startY);
+        ctx.lineTo(endX, endY); ctx.lineTo(startX, endY); ctx.closePath(); ctx.stroke();
+      }
+      else if (currentTool === 'star') {
+        let cx = startX + w/2, cy = startY + h/2, outerR = Math.abs(w/2), innerR = outerR / 2;
+        for (let i = 0; i < 5; i++) {
+          ctx.lineTo(cx + Math.cos((18 + i * 72) * Math.PI / 180) * outerR, cy - Math.sin((18 + i * 72) * Math.PI / 180) * outerR);
+          ctx.lineTo(cx + Math.cos((54 + i * 72) * Math.PI / 180) * innerR, cy - Math.sin((54 + i * 72) * Math.PI / 180) * innerR);
+        }
+        ctx.closePath(); ctx.stroke();
+      }
+      else if (currentTool === 'cross') {
+        let kw = w / 3, kh = h / 3;
+        ctx.moveTo(startX + kw, startY); ctx.lineTo(startX + 2*kw, startY);
+        ctx.lineTo(startX + 2*kw, startY + kh); ctx.lineTo(endX, startY + kh);
+        ctx.lineTo(endX, startY + 2*kh); ctx.lineTo(startX + 2*kw, startY + 2*kh);
+        ctx.lineTo(startX + 2*kw, endY); ctx.lineTo(startX + kw, endY);
+        ctx.lineTo(startX + kw, startY + 2*kh); ctx.lineTo(startX, startY + 2*kh);
+        ctx.lineTo(startX, startY + kh); ctx.lineTo(startX + kw, startY + kh);
+        ctx.closePath(); ctx.stroke();
+      }
+      else if (currentTool === 'arrow_right') {
+        ctx.moveTo(startX, startY + h*0.25); ctx.lineTo(startX + w*0.6, startY + h*0.25);
+        ctx.lineTo(startX + w*0.6, startY); ctx.lineTo(endX, startY + h*0.5);
+        ctx.lineTo(startX + w*0.6, endY); ctx.lineTo(startX + w*0.6, startY + h*0.75);
+        ctx.lineTo(startX, startY + h*0.75); ctx.closePath(); ctx.stroke();
+      }
+      else if (currentTool === 'arrow_left') {
+        ctx.moveTo(endX, startY + h*0.25); ctx.lineTo(startX + w*0.4, startY + h*0.25);
+        ctx.lineTo(startX + w*0.4, startY); ctx.lineTo(startX, startY + h*0.5);
+        ctx.lineTo(startX + w*0.4, endY); ctx.lineTo(startX + w*0.4, startY + h*0.75);
+        ctx.lineTo(endX, startY + h*0.75); ctx.closePath(); ctx.stroke();
+      }
+      else if (currentTool === 'arrow_up') {
+        ctx.moveTo(startX + w*0.25, endY); ctx.lineTo(startX + w*0.25, startY + h*0.4);
+        ctx.lineTo(startX, startY + h*0.4); ctx.lineTo(startX + w*0.5, startY);
+        ctx.lineTo(endX, startY + h*0.4); ctx.lineTo(startX + w*0.75, startY + h*0.4);
+        ctx.lineTo(startX + w*0.75, endY); ctx.closePath(); ctx.stroke();
+      }
+      else if (currentTool === 'arrow_down') {
+        ctx.moveTo(startX + w*0.25, startY); ctx.lineTo(startX + w*0.25, startY + h*0.6);
+        ctx.lineTo(startX, startY + h*0.6); ctx.lineTo(startX + w*0.5, endY);
+        ctx.lineTo(endX, startY + h*0.6); ctx.lineTo(startX + w*0.75, startY + h*0.6);
+        ctx.lineTo(startX + w*0.75, startY); ctx.closePath(); ctx.stroke();
+      }
+      else if (currentTool === 'arrow_4way') {
+        let cx = startX + w/2, cy = startY + h/2;
+        ctx.moveTo(cx - 5, cy - 5); ctx.lineTo(cx - 5, startY + 10); ctx.lineTo(cx - 12, startY + 10);
+        ctx.lineTo(cx, startY); ctx.lineTo(cx + 12, startY + 10); ctx.lineTo(cx + 5, startY + 10);
+        ctx.lineTo(cx + 5, cy - 5); ctx.lineTo(endX - 10, cy - 5); ctx.lineTo(endX - 10, cy - 12);
+        ctx.lineTo(endX, cy); ctx.lineTo(endX - 10, cy + 12); ctx.lineTo(endX - 10, cy + 5);
+        ctx.lineTo(cx + 5, cy + 5); ctx.lineTo(cx + 5, endY - 10); ctx.lineTo(cx + 12, endY - 10);
+        ctx.lineTo(cx, endY); ctx.lineTo(cx - 12, endY - 10); ctx.lineTo(cx - 5, endY - 10);
+        ctx.lineTo(cx - 5, cy + 5); ctx.lineTo(startX + 10, cy + 5); ctx.lineTo(startX + 10, cy + 12);
+        ctx.lineTo(startX, cy); ctx.lineTo(startX + 10, cy - 12); ctx.lineTo(startX + 10, cy - 5);
+        ctx.closePath(); ctx.stroke();
+      }
+      else if (currentTool === 'callout_rect') {
+        ctx.strokeRect(startX, startY, w, h*0.75);
+        ctx.moveTo(startX + w*0.2, startY + h*0.75);
+        ctx.lineTo(startX + w*0.1, endY);
+        ctx.lineTo(startX + w*0.4, startY + h*0.75);
+        ctx.stroke();
+      }
+      else if (currentTool === 'callout_cloud') {
+        ctx.ellipse(startX + w/2, startY + h/2, Math.abs(w/2), Math.abs(h/2), 0, 0, 2 * Math.PI);
+        ctx.stroke();
+        ctx.beginPath(); ctx.arc(startX + w*0.2, endY, 4, 0, 2*Math.PI); ctx.stroke();
+        ctx.beginPath(); ctx.arc(startX + w*0.3, startY + h*0.8, 6, 0, 2*Math.PI); ctx.stroke();
+      }
+      else if (currentTool === 'smartart') {
+        let boxW = w / 3;
+        ctx.strokeRect(startX, startY, boxW - 5, h);
+        ctx.strokeRect(startX + boxW + 2.5, startY, boxW - 5, h);
+        ctx.strokeRect(startX + 2*boxW + 5, startY, boxW - 5, h);
+      }
+      else if (currentTool === 'chart_bar') {
+        ctx.moveTo(startX, startY); ctx.lineTo(startX, endY); ctx.lineTo(endX, endY); ctx.stroke();
+        let barW = w / 5;
+        ctx.fillRect(startX + barW*0.5, startY + h*0.4, barW, h*0.6);
+        ctx.fillRect(startX + barW*2, startY + h*0.2, barW, h*0.8);
+        ctx.fillRect(startX + barW*3.5, startY + h*0.6, barW, h*0.4);
+      }
+      else if (currentTool === 'icon_symbol') {
+        ctx.arc(startX + w/2, startY + h/2, Math.min(Math.abs(w), Math.abs(h))/2, 0, 2*Math.PI);
+        ctx.stroke();
+        ctx.font = '20px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('💡', startX + w/2, startY + h/2);
+      }
+      else if (currentTool === 'model_3d') {
+        let side = Math.min(Math.abs(w), Math.abs(h));
+        ctx.strokeRect(startX, startY + side*0.3, side*0.7, side*0.7);
+        ctx.strokeRect(startX + side*0.3, startY, side*0.7, side*0.7);
+        ctx.moveTo(startX, startY + side*0.3); ctx.lineTo(startX + side*0.3, startY);
+        ctx.moveTo(startX + side*0.7, startY + side*0.3); ctx.lineTo(startX + side, startY);
+        ctx.moveTo(startX, endY); ctx.lineTo(startX + side*0.3, startY + side*0.7);
+        ctx.moveTo(startX + side*0.7, endY); ctx.lineTo(startX + side, startY + side*0.7);
+        ctx.stroke();
+      }
+      else if (currentTool === 'resistor') {
+        let rw = 60, rh = 22;
+        ctx.strokeRect(startX, startY - rh/2, rw, rh);
+        ctx.moveTo(startX - 15, startY); ctx.lineTo(startX, startY);
+        ctx.moveTo(startX + rw, startY); ctx.lineTo(startX + rw + 15, startY); ctx.stroke();
+      } 
+      else if (currentTool === 'capacitor') {
+        ctx.moveTo(startX, startY - 18); ctx.lineTo(startX, startY + 18);
+        ctx.moveTo(startX + 10, startY - 18); ctx.lineTo(startX + 10, startY + 18);
+        ctx.moveTo(startX - 12, startY); ctx.lineTo(startX, startY);
+        ctx.moveTo(startX + 10, startY); ctx.lineTo(startX + 22, startY); ctx.stroke();
+      } 
+      else if (currentTool === 'inductor') {
+        let r = 8;
+        ctx.moveTo(startX - 15, startY); ctx.lineTo(startX, startY);
+        for (let i = 0; i < 4; i++) {
+          ctx.arc(startX + r + (i * r * 1.5), startY, r, Math.PI, 0, false);
+        }
+        ctx.moveTo(startX + (4 * r * 1.5), startY); ctx.lineTo(startX + (4 * r * 1.5) + 15, startY); ctx.stroke();
+      } 
+      else if (currentTool === 'source') {
+        ctx.moveTo(startX - 15, startY); ctx.lineTo(startX, startY);
+        ctx.moveTo(startX, startY - 18); ctx.lineTo(startX, startY + 18);
+        ctx.moveTo(startX + 10, startY - 10); ctx.lineTo(startX + 10, startY + 10);
+        ctx.moveTo(startX + 10, startY); ctx.lineTo(startX + 25, startY); ctx.stroke();
+      } 
+      else if (currentTool === 'ground') {
+        ctx.moveTo(startX, startY); ctx.lineTo(startX, startY + 15);
+        ctx.moveTo(startX - 15, startY + 15); ctx.lineTo(startX + 15, startY + 15);
+        ctx.moveTo(startX - 10, startY + 20); ctx.lineTo(startX + 10, startY + 20);
+        ctx.moveTo(startX - 5, startY + 25); ctx.lineTo(startX + 5, startY + 25); ctx.stroke();
+      } 
+      else if (currentTool === 'switch') {
+        ctx.arc(startX, startY, 3, 0, 2 * Math.PI); ctx.fill();
+        ctx.beginPath(); ctx.arc(startX + 40, startY, 3, 0, 2 * Math.PI); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(startX - 10, startY); ctx.lineTo(startX, startY);
+        ctx.moveTo(startX, startY); ctx.lineTo(startX + 35, startY - 15);
+        ctx.moveTo(startX + 40, startY); ctx.lineTo(startX + 50, startY); ctx.stroke();
+      } 
+      else if (currentTool === 'motor') {
+        ctx.arc(startX, startY, 20, 0, 2 * Math.PI); ctx.stroke();
+        ctx.font = 'bold 16px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('M', startX, startY);
+        ctx.beginPath(); ctx.moveTo(startX - 35, startY); ctx.lineTo(startX - 20, startY);
+        ctx.moveTo(startX + 20, startY); ctx.lineTo(startX + 35, startY); ctx.stroke();
+      }
+
+      ctx.setLineDash([]);
+      isDrawing = false;
+    }
+
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', drawDuringMove);
+    canvas.addEventListener('mouseup', endDraw);
+    canvas.addEventListener('touchstart', startDraw, {passive: false});
+    canvas.addEventListener('touchmove', drawDuringMove, {passive: false});
+    canvas.addEventListener('touchend', endDraw);
+
+    function effacerCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+  </script>
+</body>
+</html>
