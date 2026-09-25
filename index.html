@@ -442,13 +442,13 @@
       pointer-events: none;
     }
 
-    .inserted-shape.selected, .watermark-overlay.selected, .imported-img.selected, .inserted-table-container.selected {
+    .inserted-shape.selected, .watermark-overlay.selected, .imported-img.selected, .imported-svg.selected, .inserted-table-container.selected {
       border-color: var(--panel-accent) !important;
       outline: 1px dashed var(--accent-primary);
     }
 
-    /* IMAGES IMPORTÉES */
-    .imported-img {
+    /* IMAGES ET REPÈRES VECTORIELS IMPORTÉS */
+    .imported-img, .imported-svg {
       position: absolute;
       top: 200px;
       left: 100px;
@@ -459,6 +459,7 @@
       border: 2px dashed transparent;
       user-select: none;
       touch-action: none;
+      background: transparent !important;
     }
 
     /* EN-TÊTE A4 */
@@ -697,7 +698,7 @@
         box-shadow: none !important;
       }
 
-      .watermark-overlay, .imported-img, .inserted-shape, .inserted-table-container {
+      .watermark-overlay, .imported-img, .imported-svg, .inserted-shape, .inserted-table-container {
         border: none !important;
         outline: none !important;
         background: transparent !important;
@@ -726,12 +727,25 @@
 
     <div class="top-actions">
       <button class="btn-3d" onclick="imprimerPDF()">🖨️ PDF</button>
-      <button class="btn-3d" onclick="alert('Sauvegardé !')" style="color: var(--accent-primary);">💾 Sauver</button>
+      <button class="btn-3d" onclick="sauvegarderEtatActuel()" style="color: var(--accent-primary);">💾 Sauver</button>
     </div>
   </header>
 
   <!-- MENU LATÉRAL RECONFIGURÉ -->
   <aside class="sidebar" id="sidebar">
+
+    <!-- GROUPE : GESTION DES FEUILLES / SAUVEGARDES -->
+    <div class="menu-group" style="border-left-color: var(--panel-accent);">
+      <div class="menu-title">💾 Gestion des Épreuves & Sauvegardes</div>
+      <input type="text" id="nomEpreuveInput" class="custom-input" placeholder="Nom de l'épreuve..." value="Épreuve 1">
+      <button class="btn-3d" onclick="sauvegarderEtatActuel()" style="color: var(--accent-primary);">💾 Sauvegarder l'épreuve active</button>
+      <button class="btn-3d" onclick="creerNouvelleFeuille()">➕ Nouvelle feuille (Vierge)</button>
+      <label style="font-size: 0.75rem; font-weight: 600; margin: 6px 0 4px; display: block; color: var(--text-color);">Mes épreuves sauvegardées :</label>
+      <select class="custom-select" id="selectSauvegardes" onchange="chargerEpreuveSelectionnee(this.value)">
+        <option value="" disabled selected>-- Choisir une épreuve sauvegardée --</option>
+      </select>
+      <button class="btn-3d" onclick="supprimerEpreuveActuelle()" style="color: #ef4444;">🗑️ Supprimer cette sauvegarde</button>
+    </div>
 
     <!-- GROUPE : FORMATAGE DU TEXTE ET COULEURS -->
     <div class="menu-group">
@@ -786,11 +800,11 @@
       <input type="file" id="imageLoader" accept="image/*" class="custom-input" onchange="importerImage(event)">
     </div>
 
-    <!-- SECTION IMPORTATION REPÈRE AUTONOME -->
+    <!-- SECTION IMPORTATION REPÈRE AUTONOME (SVG VECTORIEL SANS FOND) -->
     <div class="menu-group">
       <div class="menu-title">📐 Importer un Repère Autonome</div>
-      <label style="font-size: 0.75rem; font-weight: 600; margin-bottom: 4px; display: block; color: var(--text-color);">Choisir l'image du repère (ex: PNG/JPG) :</label>
-      <input type="file" id="repereLoader" accept="image/*" class="custom-input" onchange="importerRepereAutonome(event)">
+      <label style="font-size: 0.75rem; font-weight: 600; margin-bottom: 4px; display: block; color: var(--text-color);">Choisir le fichier SVG vectoriel :</label>
+      <input type="file" id="repereLoader" accept="image/svg+xml,.svg" class="custom-input" onchange="importerRepereAutonome(event)">
     </div>
 
     <div class="menu-group">
@@ -935,7 +949,7 @@
       <select class="custom-select" onchange="insererSymbolSelect(this)">
         <option value="" disabled selected>-- Insérer un symbole --</option>
         <option value="π">π (Pi)</option>
-        <option value="∞">∞ (Infini)</option>
+        <option value="∞">Infini</option>
         <option value="√">√ (Racine)</option>
         <option value="∑">∑ (Somme)</option>
         <option value="∫">∫ (Intégrale)</option>
@@ -1147,23 +1161,35 @@
       }
     }
 
-    /* FONCTION D'IMPORTATION DU REPÈRE AUTONOME EXTERNE */
+    /* FONCTION D'IMPORTATION DU REPÈRE AUTONOME EXTERNE EN FORMAT SVG VECTORIEL */
     function importerRepereAutonome(event) {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          const img = document.createElement('img');
-          img.src = e.target.result;
-          img.className = 'imported-img';
-          img.style.top = '220px';
-          img.style.left = '150px';
-          img.style.width = '300px';
-          document.getElementById('a4Page').appendChild(img);
-          makeElementInteractive(img);
-          selectElement(img);
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(e.target.result, "image/svg+xml");
+          const svgEl = doc.querySelector("svg");
+          
+          if (svgEl) {
+            svgEl.style.width = "100%";
+            svgEl.style.height = "100%";
+            
+            const container = document.createElement('div');
+            container.className = 'imported-svg';
+            container.style.top = '220px';
+            container.style.left = '150px';
+            container.style.width = '300px';
+            container.appendChild(svgEl);
+
+            document.getElementById('a4Page').appendChild(container);
+            makeElementInteractive(container);
+            selectElement(container);
+          } else {
+            alert("Format SVG invalide ou vide.");
+          }
         };
-        reader.readAsDataURL(file);
+        reader.readAsText(file);
       }
     }
 
@@ -1255,7 +1281,7 @@
     }
 
     function supprimerElementSelectionne() {
-      if (selectedEl && (selectedEl.classList.contains('inserted-shape') || selectedEl.classList.contains('imported-img') || selectedEl.classList.contains('inserted-table-container'))) {
+      if (selectedEl && (selectedEl.classList.contains('inserted-shape') || selectedEl.classList.contains('imported-img') || selectedEl.classList.contains('imported-svg') || selectedEl.classList.contains('inserted-table-container'))) {
         selectedEl.remove();
         selectedEl = null;
       }
@@ -1411,13 +1437,14 @@
     window.addEventListener('load', () => {
       resetZoom();
       fitCanvasSize();
+      chargerListeSauvegardes();
     });
 
     let state = { x: 0, y: 0, fontSize: 64, opacity: 1, rotation: 0 };
     let steps = { move: 3, width: 4, height: 4, opac: 5, rot: 2 };
 
     function selectElement(el) {
-      document.querySelectorAll('.watermark-overlay, .imported-img, .inserted-shape, .inserted-table-container').forEach(e => e.classList.remove('selected'));
+      document.querySelectorAll('.watermark-overlay, .imported-img, .imported-svg, .inserted-shape, .inserted-table-container').forEach(e => e.classList.remove('selected'));
       selectedEl = el;
       if (selectedEl) {
         selectedEl.classList.add('selected');
@@ -1441,7 +1468,7 @@
 
     function moveElement(dx, dy) {
       if (!selectedEl) return;
-      if (selectedEl.classList.contains('inserted-shape') || selectedEl.classList.contains('imported-img') || selectedEl.classList.contains('inserted-table-container')) {
+      if (selectedEl.classList.contains('inserted-shape') || selectedEl.classList.contains('imported-img') || selectedEl.classList.contains('imported-svg') || selectedEl.classList.contains('inserted-table-container')) {
         let currentL = selectedEl.offsetLeft || 0;
         let currentT = selectedEl.offsetTop || 0;
         selectedEl.style.left = (currentL + dx * steps.move) + 'px';
@@ -1549,12 +1576,27 @@
     }
 
     function setTheme(theme) { document.body.setAttribute('data-theme', theme); }
-    function masquerCadran() { dragContainer.style.display = 'none'; }
-    function afficherCadran() { dragContainer.style.display = 'flex'; fitCanvasSize(); }
+    function masquerCadran() { 
+      const activeDragContainer = document.getElementById('draggableCanvas');
+      if (activeDragContainer) {
+        activeDragContainer.style.display = 'none'; 
+      }
+    }
+    function afficherCadran() { 
+      const activeDragContainer = document.getElementById('draggableCanvas');
+      if (activeDragContainer) {
+        activeDragContainer.style.display = 'flex'; 
+        fitCanvasSize();
+      }
+    }
 
     function fitCanvasSize() {
-      canvas.width = dragContainer.clientWidth;
-      canvas.height = dragContainer.clientHeight - 30;
+      const activeCanvas = document.getElementById('schemaCanvas');
+      const activeDragContainer = document.getElementById('draggableCanvas');
+      if (activeCanvas && activeDragContainer) {
+        activeCanvas.width = activeDragContainer.clientWidth;
+        activeCanvas.height = activeDragContainer.clientHeight - 30;
+      }
     }
 
     let currentTool = 'line';
@@ -1576,7 +1618,9 @@
         'resistor':'Résistance', 'capacitor':'Condensateur', 'inductor':'Bobine',
         'source':'Pile / Source', 'ground':'Masse', 'switch':'Interrupteur', 'motor':'Moteur'
       };
-      toolBadge.textContent = 'Outil : ' + (toolNames[tool] || tool);
+      if (toolBadge) {
+        toolBadge.textContent = 'Outil : ' + (toolNames[tool] || tool);
+      }
     }
 
     function insererSymbolSelect(selectObj) {
@@ -1906,6 +1950,120 @@
     canvas.addEventListener('touchend', endDraw);
 
     function effacerCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+
+    /* --- NOUVEAU SYSTÈME DE SAUVEGARDE ET GESTION DES ÉPREUVES --- */
+    function getStorageData() {
+      try {
+        return JSON.parse(localStorage.getItem('athemix_epreuves')) || {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function setStorageData(data) {
+      localStorage.setItem('athemix_epreuves', JSON.stringify(data));
+    }
+
+    function sauvegarderEtatActuel() {
+      const nomInput = document.getElementById('nomEpreuveInput').value.trim() || "Épreuve sans nom";
+      const htmlContent = workspaceScaler.innerHTML;
+      
+      let storage = getStorageData();
+      storage[nomInput] = {
+        html: htmlContent,
+        pageCount: pageCount,
+        date: new Date().toLocaleString()
+      };
+      setStorageData(storage);
+      chargerListeSauvegardes();
+      alert("Épreuve '" + nomInput + "' sauvegardée avec succès !");
+    }
+
+    function chargerListeSauvegardes() {
+      const select = document.getElementById('selectSauvegardes');
+      const storage = getStorageData();
+      const currentVal = select.value;
+      
+      select.innerHTML = '<option value="" disabled selected>-- Choisir une épreuve sauvegardée --</option>';
+      
+      for (let nom in storage) {
+        const opt = document.createElement('option');
+        opt.value = nom;
+        opt.textContent = nom + " (" + storage[nom].date + ")";
+        select.appendChild(opt);
+      }
+      if (storage[currentVal]) {
+        select.value = currentVal;
+      }
+    }
+
+    function chargerEpreuveSelectionnee(nom) {
+      const storage = getStorageData();
+      if (storage[nom]) {
+        workspaceScaler.innerHTML = storage[nom].html;
+        document.getElementById('nomEpreuveInput').value = nom;
+        
+        // Ré-attacher l'interactivité aux éléments restaurés
+        document.querySelectorAll('.inserted-shape, .imported-img, .imported-svg, .inserted-table-container, .watermark-overlay').forEach(el => {
+          makeElementInteractive(el);
+        });
+      }
+    }
+
+    function creerNouvelleFeuille() {
+      if (confirm("Voulez-vous ouvrir une nouvelle feuille vierge ? (Pensez à sauvegarder votre travail actuel si ce n'est pas fait).")) {
+        workspaceScaler.innerHTML = `
+          <div class="a4-container lined" id="a4Page">
+            <div class="watermark-overlay" id="watermark" onclick="selectElement(this)">CORRECTION OFFICIELLE</div>
+            <div class="a4-header">
+              <div class="a4-header-row">
+                <input type="text" placeholder="Matière (ex: Physique / Dessin Technique)">
+                <input type="text" placeholder="Classe">
+                <input type="text" placeholder="Date: JJ/MM/AAAA">
+              </div>
+              <div class="a4-header-row">
+                <input type="text" class="author-field" placeholder="Correcteur / Auteur">
+              </div>
+            </div>
+            <div class="draggable-canvas-container" id="draggableCanvas">
+              <div class="canvas-handle" id="canvasHandle">
+                <span>✋ Déplacer le cadran</span>
+                <span class="tool-badge" id="toolBadge">Outil : Trait Plein</span>
+                <span style="cursor: pointer; font-size: 1rem;" onclick="masquerCadran()">❌</span>
+              </div>
+              <canvas id="schemaCanvas"></canvas>
+            </div>
+            <div class="a4-editor" id="editor" contenteditable="true" onclick="positionnerCurseurDirect(event)">Toucher ici pour commencer à écrire...</div>
+          </div>
+        `;
+        document.getElementById('nomEpreuveInput').value = "Nouvelle épreuve";
+        pageCount = 1;
+        
+        // Ré-initialiser les références globales du canvas après ré-injection HTML
+        const newCanvas = document.getElementById('schemaCanvas');
+        const newHandle = document.getElementById('canvasHandle');
+        if(newHandle) {
+          newHandle.addEventListener("mousedown", dragStart);
+          newHandle.addEventListener("touchstart", dragStart, {passive: false});
+        }
+        fitCanvasSize();
+      }
+    }
+
+    function supprimerEpreuveActuelle() {
+      const nom = document.getElementById('nomEpreuveInput').value.trim();
+      let storage = getStorageData();
+      if (storage[nom]) {
+        if (confirm("Voulez-vous vraiment supprimer la sauvegarde de '" + nom + "' ?")) {
+          delete storage[nom];
+          setStorageData(storage);
+          chargerListeSauvegardes();
+          alert("Sauvegarde supprimée.");
+        }
+      } else {
+        alert("Aucune sauvegarde trouvée avec ce nom exact.");
+      }
+    }
   </script>
 </body>
 </html>
