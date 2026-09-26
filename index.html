@@ -14,7 +14,6 @@
       --paper-bg: #ffffff;
       --paper-line: #cbd5e1;
       
-      /* Style Panneau Sombre */
       --panel-bg: #111111;
       --panel-card: #1c1c1c;
       --panel-border: #2a2a2a;
@@ -56,15 +55,13 @@
     body {
       background-color: var(--bg-color);
       color: var(--text-color);
-      min-height: 100vh;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       transition: background 0.3s ease;
-      padding-bottom: 240px;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
-    /* BARRE SUPÉRIEURE */
     header {
       padding: 10px 20px;
       display: flex;
@@ -73,8 +70,7 @@
       background: var(--card-bg);
       box-shadow: 0 2px 10px rgba(0,0,0,0.08);
       z-index: 100;
-      position: sticky;
-      top: 0;
+      flex-shrink: 0;
     }
 
     .header-left {
@@ -118,7 +114,6 @@
       align-items: center;
     }
 
-    /* CONTROLES DE ZOOM RAPIDE */
     .zoom-controls {
       display: flex;
       gap: 4px;
@@ -146,7 +141,6 @@
       text-align: center;
     }
 
-    /* MENU LATÉRAL */
     .sidebar {
       position: fixed;
       top: 0;
@@ -251,7 +245,6 @@
       margin-bottom: 8px;
     }
 
-    /* DÉROULANT DU MENU DE SCHÉMAS & DESSINS */
     .shapes-accordion-content {
       display: none;
       grid-template-columns: repeat(2, 1fr);
@@ -300,26 +293,33 @@
       font-size: 1.2rem;
     }
 
-    /* CONTENEUR DE ZOOM & ESPACE DE TRAVAIL */
+    .text-frame-rect { border: 2px solid var(--accent-primary); padding: 2px 6px; border-radius: 4px; display: inline-block; }
+    .text-frame-solid { border: 1px solid #0f172a; padding: 2px 6px; display: inline-block; }
+    .text-frame-dashed { border: 2px dashed #0f172a; padding: 2px 6px; display: inline-block; }
+    .text-frame-dotted { border: 2px dotted #0f172a; padding: 2px 6px; display: inline-block; }
+    .text-double-solid { border-bottom: 3px double #0f172a; padding-bottom: 1px; }
+    .text-double-dashed { border-bottom: 3px dashed #0f172a; padding-bottom: 1px; }
+    .text-double-interrupted { border-bottom: 3px dotted #0f172a; padding-bottom: 1px; }
+
     .zoom-viewport {
       flex: 1;
       width: 100%;
       overflow: auto;
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 20px 0;
-      touch-action: pan-x pan-y;
+      padding: 20px;
+      touch-action: manipulation;
     }
 
     .workspace-scaler {
       transform-origin: top center;
-      transition: transform 0.1s ease-out;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 30px;
-      padding: 10px;
+      width: 794px;
     }
 
     .a4-container {
@@ -333,6 +333,7 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
     .a4-container.lined {
@@ -342,7 +343,6 @@
 
     .a4-container.blank { background-image: none; }
 
-    /* STYLES SPÉCIFIQUES : VRAIES FRACTIONS HORIZONTALES & TABLEAUX ÉDITABLES */
     .math-frac {
       display: inline-flex;
       flex-direction: column;
@@ -353,24 +353,10 @@
       border: 1px dashed transparent;
       cursor: text;
     }
-    .math-frac:hover {
-      border-color: var(--accent-primary);
-    }
-    .math-num {
-      border-bottom: 1.5px solid #0f172a;
-      padding: 0 4px;
-      outline: none;
-      min-width: 20px;
-      display: inline-block;
-    }
-    .math-den {
-      padding: 0 4px;
-      outline: none;
-      min-width: 20px;
-      display: inline-block;
-    }
+    .math-frac:hover { border-color: var(--accent-primary); }
+    .math-num { border-bottom: 1.5px solid #0f172a; padding: 0 4px; outline: none; min-width: 20px; display: inline-block; }
+    .math-den { padding: 0 4px; outline: none; min-width: 20px; display: inline-block; }
 
-    /* Tableaux éditables insérés */
     .inserted-table-container {
       position: absolute;
       z-index: 15;
@@ -397,7 +383,6 @@
       cursor: text;
     }
 
-    /* FILIGRANE DU TEXTE ET OBJETS INSÉRÉS */
     .watermark-overlay {
       display: none;
       position: absolute;
@@ -418,10 +403,8 @@
       border: 2px dashed transparent;
       padding: 10px;
     }
-
     .watermark-overlay.active { display: block; }
 
-    /* COMPOSANTS / FORMES SUR LE DOCUMENT DE TRAVAIL */
     .inserted-shape {
       position: absolute;
       z-index: 15;
@@ -434,20 +417,13 @@
       top: 300px;
       left: 300px;
     }
-
-    .inserted-shape svg {
-      display: block;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
+    .inserted-shape svg { display: block; width: 100%; height: 100%; pointer-events: none; }
 
     .inserted-shape.selected, .watermark-overlay.selected, .imported-img.selected, .imported-svg.selected, .inserted-table-container.selected {
       border-color: var(--panel-accent) !important;
       outline: 1px dashed var(--accent-primary);
     }
 
-    /* IMAGES ET REPÈRES VECTORIELS IMPORTÉS */
     .imported-img, .imported-svg {
       position: absolute;
       top: 200px;
@@ -462,7 +438,6 @@
       background: transparent !important;
     }
 
-    /* EN-TÊTE A4 */
     .a4-header {
       border: 2px solid var(--accent-primary);
       border-radius: 6px;
@@ -493,7 +468,6 @@
       color: var(--accent-primary);
     }
 
-    /* CADRAN DÉPLAÇABLE / DESSIN */
     .draggable-canvas-container {
       position: absolute;
       top: 180px;
@@ -541,7 +515,6 @@
       touch-action: none;
     }
 
-    /* ÉDITEUR LIBRE */
     .a4-editor {
       width: 100%;
       flex: 1;
@@ -558,7 +531,6 @@
       min-height: 800px;
     }
 
-    /* PANNEAU DE CONTRÔLE FIXE EN BAS */
     .control-panel-fixed {
       position: fixed;
       bottom: 0;
@@ -647,62 +619,13 @@
       justify-content: center;
     }
 
-    /* RÈGLES D'IMPRESSION (SEUL LE FORMAT A4 SERA IMPRIMÉ) */
     @media print {
-      @page {
-        size: A4 portrait;
-        margin: 0;
-      }
-
-      body {
-        background: #ffffff !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        overflow: visible !important;
-      }
-
-      header, 
-      .sidebar, 
-      .control-panel-fixed, 
-      .canvas-handle {
-        display: none !important;
-      }
-
-      .zoom-viewport {
-        padding: 0 !important;
-        margin: 0 !important;
-        overflow: visible !important;
-        display: block !important;
-      }
-
-      .workspace-scaler {
-        transform: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        gap: 0 !important;
-      }
-
-      .a4-container {
-        box-shadow: none !important;
-        border-radius: 0 !important;
-        width: 100% !important;
-        min-height: 100vh !important;
-        margin: 0 !important;
-        padding: 15mm 15mm !important;
-        page-break-after: always;
-        break-after: page;
-      }
-
-      .draggable-canvas-container {
-        border: none !important;
-        box-shadow: none !important;
-      }
-
-      .watermark-overlay, .imported-img, .imported-svg, .inserted-shape, .inserted-table-container {
-        border: none !important;
-        outline: none !important;
-        background: transparent !important;
-      }
+      @page { size: A4 portrait; margin: 0; }
+      body { background: #ffffff !important; padding: 0 !important; margin: 0 !important; overflow: visible !important; }
+      header, .sidebar, .control-panel-fixed, .canvas-handle { display: none !important; }
+      .zoom-viewport { padding: 0 !important; margin: 0 !important; overflow: visible !important; display: block !important; }
+      .workspace-scaler { transform: none !important; padding: 0 !important; margin: 0 !important; gap: 0 !important; width: 100% !important; }
+      .a4-container { box-shadow: none !important; border-radius: 0 !important; width: 100% !important; min-height: 100vh !important; margin: 0 !important; padding: 15mm 15mm !important; page-break-after: always; break-after: page; }
     }
   </style>
 </head>
@@ -722,7 +645,7 @@
       <button class="zoom-btn" onclick="applyZoom(-0.1)">🔍 -</button>
       <span class="zoom-display" id="zoomLevel">100%</span>
       <button class="zoom-btn" onclick="applyZoom(0.1)">🔍 +</button>
-      <button class="zoom-btn" onclick="resetZoom()">🎯 100%</button>
+      <button class="zoom-btn" onclick="resetZoom()">🎯 Ajuster</button>
     </div>
 
     <div class="top-actions">
@@ -731,10 +654,7 @@
     </div>
   </header>
 
-  <!-- MENU LATÉRAL RECONFIGURÉ -->
   <aside class="sidebar" id="sidebar">
-
-    <!-- GROUPE : GESTION DES FEUILLES / SAUVEGARDES -->
     <div class="menu-group" style="border-left-color: var(--panel-accent);">
       <div class="menu-title">💾 Gestion des Épreuves & Sauvegardes</div>
       <input type="text" id="nomEpreuveInput" class="custom-input" placeholder="Nom de l'épreuve..." value="Épreuve 1">
@@ -747,10 +667,8 @@
       <button class="btn-3d" onclick="supprimerEpreuveActuelle()" style="color: #ef4444;">🗑️ Supprimer cette sauvegarde</button>
     </div>
 
-    <!-- GROUPE : FORMATAGE DU TEXTE ET COULEURS -->
     <div class="menu-group">
       <div class="menu-title">✍️ Formatage Texte & Titres</div>
-      
       <div class="btn-inline-group">
         <button class="btn-3d" onclick="formatText('bold')" title="Gras"><b>B</b></button>
         <button class="btn-3d" onclick="formatText('italic')" title="Italique"><i>I</i></button>
@@ -788,6 +706,18 @@
       </select>
     </div>
 
+    <div class="menu-group" style="border-left-color: var(--panel-accent);">
+      <div class="menu-title">✒️ Cadres & Soulignements du Texte</div>
+      <label style="font-size: 0.75rem; font-weight: 600; margin-bottom: 6px; display: block; color: var(--text-color);">Sélectionnez un mot ou une phrase, puis cliquez :</label>
+      <button class="btn-3d" onclick="appliquerCadreTexte('text-frame-rect')">⬛ Cadre Rectangulaire</button>
+      <button class="btn-3d" onclick="appliquerCadreTexte('text-frame-solid')">🔲 Cadre en Trait Continu</button>
+      <button class="btn-3d" onclick="appliquerCadreTexte('text-frame-dashed')">⬚ Cadre Interrompu</button>
+      <button class="btn-3d" onclick="appliquerCadreTexte('text-frame-dotted')">⏹️ Cadre en Pointillé</button>
+      <button class="btn-3d" onclick="appliquerCadreTexte('text-double-solid')">⚌ Deux Traits Continus</button>
+      <button class="btn-3d" onclick="appliquerCadreTexte('text-double-dashed')">╍ Deux Traits Pointillés</button>
+      <button class="btn-3d" onclick="appliquerCadreTexte('text-double-interrupted')">☷ Deux Traits Interrompus</button>
+    </div>
+
     <div class="menu-group">
       <div class="menu-title">📄 Gestion Multi-Pages</div>
       <button class="btn-3d" onclick="ajouterPageA4()">➕ Ajouter une Page A4</button>
@@ -800,10 +730,8 @@
       <input type="file" id="imageLoader" accept="image/*" class="custom-input" onchange="importerImage(event)">
     </div>
 
-    <!-- SECTION IMPORTATION REPÈRE AUTONOME (SVG VECTORIEL SANS FOND) -->
     <div class="menu-group">
       <div class="menu-title">📐 Importer un Repère Autonome</div>
-      <label style="font-size: 0.75rem; font-weight: 600; margin-bottom: 4px; display: block; color: var(--text-color);">Choisir le fichier SVG vectoriel :</label>
       <input type="file" id="repereLoader" accept="image/svg+xml,.svg" class="custom-input" onchange="importerRepereAutonome(event)">
     </div>
 
@@ -815,14 +743,12 @@
       <input type="color" id="watermarkColor" value="#2563eb" class="custom-input" style="height:40px; padding:2px;" onchange="updateWatermarkColor()">
     </div>
 
-    <!-- OPTION DES SCHÉMAS ET FORMES INTÉGRÉE -->
     <div class="menu-group">
       <div class="menu-title menu-title-toggle" onclick="toggleShapesAccordion()">
         <span>📐 Outils de Schéma & Tracé</span>
         <span id="accordionArrow">▼</span>
       </div>
 
-      <!-- Grille visuelle dépliante de TOUTES les formes et symboles -->
       <div class="shapes-accordion-content" id="shapesAccordion">
         <div class="shape-card-item" onclick="selectShapeTool('line')"><div class="shape-card-icon">📏</div><div>Trait Plein</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('dashed')"><div class="shape-card-icon">┈</div><div>Pointillés</div></div>
@@ -834,102 +760,17 @@
 
         <div class="shape-card-item" onclick="selectShapeTool('rect')"><div class="shape-card-icon">🔲</div><div>Rectangle</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('round_rect')"><div class="shape-card-icon">▢</div><div>Rect. Arrondi</div></div>
-
         <div class="shape-card-item" onclick="selectShapeTool('circle')"><div class="shape-card-icon">⚪</div><div>Cercle / Oval</div></div>
         <div class="shape-card-item" onclick="selectShapeTool('triangle')"><div class="shape-card-icon">🔺</div><div>Triangle</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('diamond')"><div class="shape-card-icon">🔷</div><div>Losange / Condition</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('trapezoid')"><div class="shape-card-icon">⏢</div><div>Trapèze</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('parallelogram')"><div class="shape-card-icon">▱</div><div>Parallélogramme</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('star')"><div class="shape-card-icon">⭐</div><div>Étoile</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('cross')"><div class="shape-card-icon">➕</div><div>Croix</div></div>
-
-        <div class="shape-card-item" onclick="selectShapeTool('arrow_right')"><div class="shape-card-icon">➡</div><div>Flèche Droite</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('arrow_left')"><div class="shape-card-icon">⬅</div><div>Flèche Gauche</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('arrow_up')"><div class="shape-card-icon">⬆</div><div>Flèche Haut</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('arrow_down')"><div class="shape-card-icon">⬇</div><div>Flèche Bas</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('arrow_4way')"><div class="shape-card-icon">✢</div><div>Flèche 4-Voies</div></div>
-
-        <div class="shape-card-item" onclick="selectShapeTool('flow_process')"><div class="shape-card-icon">▭</div><div>Processus</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('flow_decision')"><div class="shape-card-icon">◇</div><div>Décision</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('flow_terminator')"><div class="shape-card-icon">⬭</div><div>Début / Fin</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('flow_data')"><div class="shape-card-icon">▱</div><div>Données (E/S)</div></div>
-
-        <div class="shape-card-item" onclick="selectShapeTool('callout_rect')"><div class="shape-card-icon">💬</div><div>Bulle Rectangulaire</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('callout_cloud')"><div class="shape-card-icon">💭</div><div>Bulle Nuage</div></div>
-
-        <div class="shape-card-item" onclick="selectShapeTool('smartart')"><div class="shape-card-icon">📊</div><div>SmartArt Bloc</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('chart_bar')"><div class="shape-card-icon">📈</div><div>Graphique Bâtons</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('icon_symbol')"><div class="shape-card-icon">💡</div><div>Icône / Symbole</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('model_3d')"><div class="shape-card-icon">🧊</div><div>Modèle 3D Cube</div></div>
-
-        <div class="shape-card-item" onclick="selectShapeTool('resistor')"><div class="shape-card-icon">⚡</div><div>Résistance</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('capacitor')"><div class="shape-card-icon">⏸️</div><div>Condensateur</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('inductor')"><div class="shape-card-icon">🌀</div><div>Bobine</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('source')"><div class="shape-card-icon">🔋</div><div>Source / Pile</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('ground')"><div class="shape-card-icon">⏚</div><div>Masse / Terre</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('switch')"><div class="shape-card-icon">⎘</div><div>Interrupteur</div></div>
-        <div class="shape-card-item" onclick="selectShapeTool('motor')"><div class="shape-card-icon">Ⓞ</div><div>Moteur</div></div>
+        <div class="shape-card-item" onclick="selectShapeTool('diamond')"><div class="shape-card-icon">🔷</div><div>Losange</div></div>
       </div>
 
       <select class="custom-select" id="toolSelect" onchange="selectShapeTool(this.value)">
-        <optgroup label="── Lignes & Traits ──">
-          <option value="line">📏 Trait Plein Continu</option>
-          <option value="dashed">┈ Trait Pointillé</option>
-          <option value="dashdot">∿ Trait Mixte</option>
-          <option value="arrow">➔ Flèche Simple</option>
-          <option value="double_arrow">↔ Double Flèche (Cote)</option>
-          <option value="curve">↪ Ligne Courbe / Arc</option>
-          <option value="freehand">✏️ Tracé Libre / Stylet</option>
-        </optgroup>
-
-        <optgroup label="── Rectangles & Formes de Base ──">
-          <option value="rect">🔲 Rectangle / Carré</option>
-          <option value="round_rect">▢ Rectangle Arrondi</option>
-          <option value="circle">⚪ Cercle / Ellipse</option>
-          <option value="triangle">🔺 Triangle</option>
-          <option value="diamond">🔷 Losange</option>
-          <option value="trapezoid">⏢ Trapèze</option>
-          <option value="parallelogram">▱ Parallélogramme</option>
-          <option value="star">⭐ Étoile</option>
-          <option value="cross">➕ Croix</option>
-        </optgroup>
-
-        <optgroup label="── Flèches Pleines ──">
-          <option value="arrow_right">➡ Flèche Droite</option>
-          <option value="arrow_left">⬅ Flèche Gauche</option>
-          <option value="arrow_up">⬆ Flèche Haut</option>
-          <option value="arrow_down">⬇ Flèche Bas</option>
-          <option value="arrow_4way">✢ Flèche 4-Voies / Quadruple</option>
-        </optgroup>
-
-        <optgroup label="── Organigrammes & Schémas ──">
-          <option value="flow_process">▭ Processus (Rectangle)</option>
-          <option value="flow_decision">◇ Condition / Décision</option>
-          <option value="flow_terminator">⬭ Début / Fin (Ellipse)</option>
-          <option value="flow_data">▱ Entrée / Sortie (Données)</option>
-        </optgroup>
-
-        <optgroup label="── Bulles & Légendes ──">
-          <option value="callout_rect">💬 Bulle de Légende Rectangulaire</option>
-          <option value="callout_cloud">💭 Bulle de Légende Nuage</option>
-        </optgroup>
-
-        <optgroup label="── Illustrations & Modèles Word ──">
-          <option value="smartart">📊 Bloc SmartArt / Organigramme</option>
-          <option value="chart_bar">📈 Graphique Historigramme</option>
-          <option value="icon_symbol">💡 Icône / Pictogramme</option>
-          <option value="model_3d">🧊 Modèle 3D Isométrique</option>
-        </optgroup>
-
-        <optgroup label="── Électrotechnique & Physique ──">
-          <option value="resistor">⚡ Résistance</option>
-          <option value="capacitor">⏸️ Condensateur</option>
-          <option value="inductor">🌀 Bobine / Inductance</option>
-          <option value="source">🔋 Source de Tension (Pile)</option>
-          <option value="ground">⏚ Masse / Terre</option>
-          <option value="switch">⎘ Interrupteur Ouvert</option>
-          <option value="motor">Ⓞ Moteur (M)</option>
-        </optgroup>
+        <option value="line">📏 Trait Plein Continu</option>
+        <option value="dashed">┈ Trait Pointillé</option>
+        <option value="arrow">➔ Flèche Simple</option>
+        <option value="rect">🔲 Rectangle / Carré</option>
+        <option value="circle">⚪ Cercle / Ellipse</option>
       </select>
       <button class="btn-3d" onclick="effacerCanvas()" style="color: #ef4444;">🗑️ Vider le Dessin</button>
       <button class="btn-3d" onclick="supprimerElementSelectionne()" style="color: #ef4444;">❌ Supprimer Forme Sélectionnée</button>
@@ -944,45 +785,42 @@
       <button class="btn-3d" onclick="insererTableauPersonnalise()">➕ Insérer mon Tableau</button>
     </div>
 
-    <!-- SECTION SYMBOLES MISE À JOUR EXACTEMENT COMME SUR L'IMAGE -->
     <div class="menu-group">
-      <div class="menu-title">🔢 Symboles</div>
+      <div class="menu-title">🔢 Tous les Symboles Math & Physique</div>
       <select class="custom-select" onchange="insererSymbolSelect(this)">
-        <option value="" disabled selected>-- Insérer un symbole --</option>
-        
-        <optgroup label="── Ensembles et nombres ──">
+        <option value="" disabled selected>-- Insérer un symbole (Complet) --</option>
+        <optgroup label="Ensembles et nombres">
           <option value="ℕ">ℕ : ensemble des nombres naturels</option>
-          <option value="ℤ">ℤ : ensemble des nombres entiers</option>
+          <option value="ℤ">ℤ : ensemble des entiers</option>
           <option value="ℚ">ℚ : ensemble des nombres rationnels</option>
           <option value="ℝ">ℝ : ensemble des nombres réels</option>
           <option value="ℂ">ℂ : ensemble des nombres complexes</option>
-          <option value="℘(A)">℘(A) : ensemble des parties de A</option>
+          <option value="𝒫(A)">𝒫(A) : ensemble des parties de A</option>
           <option value="∅">∅ : ensemble vide</option>
-          <option value="∪">A ∪ B : union d'ensembles</option>
-          <option value="∩">A ∩ B : intersection d'ensembles</option>
-          <option value="∖">A \ B : différence d'ensembles</option>
-          <option value="Ac">Ac : complémentaire de A</option>
-          <option value="×">A × B : produit cartésien</option>
+          <option value="A ∪ B">A ∪ B : union d'ensembles</option>
+          <option value="A ∩ B">A ∩ B : intersection d'ensembles</option>
+          <option value="A \ B">A \ B : différence d'ensembles</option>
+          <option value="A^c">A^c : complémentaire de A</option>
+          <option value="A × B">A × B : produit cartésien</option>
         </optgroup>
-
-        <optgroup label="── Relations et appartenance ──">
+        <optgroup label="Relations et appartenance">
           <option value="∈">∈ : appartient à</option>
           <option value="∉">∉ : n'appartient pas à</option>
           <option value="⊂">⊂ : est inclus dans</option>
           <option value="⊄">⊄ : n'est pas inclus dans</option>
-          <option value="⊆">⊆ : inclus (ou égal)</option>
-          <option value="⊇">⊇ : contient (ou égal)</option>
+          <option value="⊃">⊃ : contient (ou égal)</option>
           <option value="=">= : égal à</option>
           <option value="≠">≠ : différent de</option>
-          <option value="&lt;">&lt; : strictement inférieur à</option>
+          <option value="<">&lt; : strictement inférieur à</option>
           <option value="≤">≤ : inférieur ou égal à</option>
-          <option value="&gt;">&gt; : strictement supérieur à</option>
+          <option value=">">&gt; : strictement supérieur à</option>
           <option value="≥">≥ : supérieur ou égal à</option>
-          <option value="⇔">⇔ : équivalence</option>
+          <option value="≈">≈ : approximation</option>
+          <option value="≡">≡ : équivalent à</option>
           <option value="⇒">⇒ : implication</option>
+          <option value="⇔">⇔ : équivalence</option>
         </optgroup>
-
-        <optgroup label="── Quantificateurs et logique ──">
+        <optgroup label="Quantificateurs et logique">
           <option value="∀">∀ : pour tout</option>
           <option value="∃">∃ : il existe</option>
           <option value="¬">¬ : non</option>
@@ -990,47 +828,44 @@
           <option value="∨">∨ : ou</option>
           <option value="→">→ : implique</option>
           <option value="↔">↔ : équivalent à</option>
-          <option value="⊢">⊢ : donc, par conséquent</option>
-          <option value="∴">∴ : donc</option>
+          <option value="∴">∴ : donc, par conséquent</option>
           <option value="∵">∵ : car, parce que</option>
           <option value="()">() : parenthèses</option>
           <option value="[]">[] : crochet</option>
           <option value="{}">{} : accolade</option>
         </optgroup>
-
-        <optgroup label="── Fonctions et notations ──">
+        <optgroup label="Fonctions et notations">
           <option value="f(x)">f(x) : fonction</option>
           <option value="f ∘ g">f ∘ g : composition de fonctions</option>
-          <option value="f⁻¹">f⁻¹ : fonction inverse</option>
-          <option value="Df">Df : domaine de définition</option>
+          <option value="f^-1">f^-1 : fonction inverse</option>
+          <option value="D_f">D_f : domaine de définition</option>
           <option value="Im(f)">Im(f) : image d'une fonction</option>
-          <option value="lim">lim f(x) : limite</option>
+          <option value="lim f(x)">lim f(x) : limite</option>
           <option value="f'(x)">f'(x) : dérivée</option>
           <option value="f''(x)">f''(x) : dérivée seconde</option>
           <option value="∫">∫ : intégrale</option>
-          <option value="∮">∮ : intégrale définie</option>
+          <option value="∫_a^b">∫_a^b : intégrale définie</option>
           <option value="∑">∑ : somme (sigma)</option>
           <option value="∏">∏ : produit (pi)</option>
         </optgroup>
-
-        <optgroup label="── Géométrie ──">
+        <optgroup label="Géométrie">
           <option value="∠">∠ : angle</option>
           <option value="△">△ : triangle</option>
-          <option value="◻">◻ : carré</option>
+          <option value="□">□ : carré</option>
           <option value="◯">◯ : cercle</option>
           <option value="⊙">⊙ : cercle (centre)</option>
           <option value="⊥">⊥ : perpendiculaire</option>
           <option value="∥">∥ : parallèle</option>
-          <option value="≡">≡ : égalité de segments</option>
+          <option value="=======">=== : égalité de segments</option>
           <option value="≈">≈ : approximativement égal</option>
-          <option value="AB">AB : segment [AB]</option>
-          <option value="→AB">→AB : vecteur</option>
-          <option value="|AB|">|AB| : longueur</option>
+          <option value="[AB]">[AB] : segment [AB]</option>
+          <option value="(AB)">(AB) : droite</option>
+          <option value="AB">AB : vecteur</option>
+          <option value="AB (longueur)">AB : longueur</option>
           <option value="S">S : aire</option>
           <option value="V">V : volume</option>
         </optgroup>
-
-        <optgroup label="── Opérations mathématiques ──">
+        <optgroup label="Opérations mathématiques">
           <option value="+">+ : addition</option>
           <option value="-">- : soustraction</option>
           <option value="×">× : multiplication</option>
@@ -1042,27 +877,24 @@
           <option value="∛">∛ : racine cubique</option>
           <option value="∜">∜ : racine n-ième</option>
           <option value="|x|">|x| : valeur absolue</option>
-          <option value="⁄">⁄ : fraction</option>
           <option value="%">% : pourcentage</option>
         </optgroup>
-
-        <optgroup label="── Symboles spécifiques ──">
-          <option value="Δ">Δ : discriminant</option>
-          <option value="∑">∑ : somme</option>
-          <option value="∏">∏ : produit</option>
+        <optgroup label="Symboles spécifiques">
+          <option value="Δ">Δ : delta / discriminant</option>
+          <option value="Σ">Σ : somme</option>
+          <option value="Π">Π : produit</option>
           <option value="∝">∝ : proportionnel à</option>
           <option value="∞">∞ : infini</option>
           <option value="≈">≈ : approximation</option>
-          <option value="≡">≡ : équivalent</option>
+          <option value="≃">≃ : équivalent</option>
           <option value="≠">≠ : différent de</option>
           <option value="≤">≤ : inférieur ou égal</option>
           <option value="≥">≥ : supérieur ou égal</option>
-          <option value="±">± : plus ou moins</option>
+          <option value="∓">∓ : plus ou moins</option>
           <option value="∇">∇ : nabla (gradient)</option>
           <option value="d/dx">d/dx : dérivée (notation opérateur)</option>
         </optgroup>
-
-        <optgroup label="── Trigonométrie ──">
+        <optgroup label="Trigonométrie">
           <option value="sin">sin : sinus</option>
           <option value="cos">cos : cosinus</option>
           <option value="tan">tan : tangente</option>
@@ -1072,35 +904,32 @@
           <option value="π">π : pi (≈ 3,14159...)</option>
           <option value="°">° : degré</option>
           <option value="rad">rad : radian</option>
-          <option value="sin²">sin², cos² : au carré</option>
+          <option value="sin² + cos² = 1">sin² + cos² = 1 : au carré</option>
           <option value="tan⁻¹">tan⁻¹ : arc tangente</option>
           <option value="sin⁻¹">sin⁻¹ : arc sinus</option>
         </optgroup>
-
-        <optgroup label="── Calcul différentiel et intégral ──">
+        <optgroup label="Calcul différentiel et intégral">
           <option value="df/dy">df/dy : différentiel</option>
-          <option value="dx">dx : dérivée</option>
+          <option value="dy/dx">dy/dx : dérivée</option>
           <option value="d²y/dx²">d²y/dx² : dérivée seconde</option>
-          <option value="∫">∫ : intégrale indéfinie</option>
-          <option value="∮">∮ : intégrale définie</option>
-          <option value="∂/∂x">∂/∂x : dérivée partielle</option>
-          <option value="∇">∇ : gradient</option>
-          <option value="Δ">Δ : laplacien</option>
+          <option value="∫ ... dx">∫ : intégrale indéfinie</option>
+          <option value="∫_a^b ... dx">∫ : intégrale définie</option>
+          <option value="∂f/∂x">∂f/∂x : dérivée partielle</option>
+          <option value="∇f">∇f : gradient</option>
+          <option value="Δ (laplacien)">Δ : laplacien</option>
           <option value="d">d : élément différentiel</option>
           <option value="dx">dx : élément différentiel (variable)</option>
         </optgroup>
-
-        <optgroup label="── Physique – Grandeurs et constantes ──">
+        <optgroup label="Physique – Grandeurs et constantes">
           <option value="m">m : masse</option>
           <option value="t">t : temps</option>
-          <option value="x,y,z">x, y, z : position (coordonnées)</option>
+          <option value="x, y, z">x, y, z : position (coordonnées)</option>
           <option value="v">v : vitesse</option>
           <option value="a">a : accélération</option>
           <option value="F">F : force</option>
           <option value="E">E : énergie</option>
-          <option value="P">P : puissance</option>
+          <option value="P">P : puissance / pression</option>
           <option value="ρ">ρ : densité</option>
-          <option value="P">P : pression</option>
           <option value="T">T : température</option>
           <option value="Q">Q : charge électrique</option>
           <option value="V">V : potentiel électrique</option>
@@ -1108,16 +937,15 @@
           <option value="G">G : constante de gravitation</option>
           <option value="h">h : constante de Planck</option>
           <option value="c">c : vitesse de la lumière</option>
-          <option value="kB">kB : constante de Boltzmann</option>
+          <option value="k_B">k_B : constante de Boltzmann</option>
           <option value="R">R : constante des gaz parfaits</option>
           <option value="e">e : charge élémentaire</option>
-          <option value="NA">NA : nombre d'Avogadro</option>
-          <option value="ε₀">ε₀ : permittivité du vide</option>
-          <option value="μ₀">μ₀ : perméabilité du vide</option>
+          <option value="N_A">N_A : nombre d'Avogadro</option>
+          <option value="ε_0">ε_0 : permittivité du vide</option>
+          <option value="μ_0">μ_0 : perméabilité du vide</option>
         </optgroup>
-
-        <optgroup label="── Unités (SI) ──">
-          <option value="m">m : mètre (longueur)</option>
+        <optgroup label="Unités (SI)">
+          <option value="m (mètre)">m : mètre (longueur)</option>
           <option value="kg">kg : kilogramme (masse)</option>
           <option value="s">s : seconde (temps)</option>
           <option value="A">A : ampère (courant électrique)</option>
@@ -1125,56 +953,51 @@
           <option value="mol">mol : mole (quantité de matière)</option>
           <option value="cd">cd : candela (intensité lumineuse)</option>
         </optgroup>
-
-        <optgroup label="── Mécanique ──">
-          <option value="v">v : vitesse</option>
-          <option value="a">a : accélération</option>
-          <option value="F">F : force</option>
-          <option value="P">P : quantité de mouvement</option>
-          <option value="Ec">Ec : énergie cinétique</option>
-          <option value="Ep">Ep : énergie potentielle</option>
+        <optgroup label="Mécanique">
+          <option value="v (méca)">v : vitesse</option>
+          <option value="a (méca)">a : accélération</option>
+          <option value="F (méca)">F : force</option>
+          <option value="P (méca)">P : quantité de mouvement</option>
+          <option value="E_c">E_c : énergie cinétique</option>
+          <option value="E_p">E_p : énergie potentielle</option>
           <option value="W">W : travail</option>
           <option value="τ">τ : couple</option>
-          <option value="I">I : moment d'inertie</option>
+          <option value="I (méca)">I : moment d'inertie</option>
           <option value="L">L : moment cinétique</option>
         </optgroup>
-
-        <optgroup label="── Électromagnétisme ──">
-          <option value="E">E : champ électrique</option>
+        <optgroup label="Électromagnétisme">
+          <option value="E (élec)">E : champ électrique</option>
           <option value="B">B : champ magnétique</option>
           <option value="Φ">Φ : flux magnétique</option>
           <option value="U">U : tension</option>
-          <option value="I">I : intensité du courant</option>
-          <option value="R">R : résistance</option>
+          <option value="I (élec)">I : intensité du courant</option>
+          <option value="R (élec)">R : résistance</option>
           <option value="C">C : capacité</option>
-          <option value="L">L : inductance</option>
+          <option value="L (élec)">L : inductance</option>
           <option value="ε">ε : force électromotrice</option>
-          <option value="f">f : fréquence</option>
+          <option value="f (élec)">f : fréquence</option>
         </optgroup>
-
-        <optgroup label="── Autres symboles courants ──">
+        <optgroup label="Autres symboles courants">
           <option value="%">% : pourcentage</option>
           <option value="‰">‰ : pour mille</option>
-          <option value="°">° : degré</option>
-          <option value="'">' : minute (angle)</option>
-          <option value="''">'' : seconde (angle)</option>
-          <option value="→">→ : vecteur</option>
-          <option value=":">: : ratio</option>
+          <option value="′">′ : minute (angle)</option>
+          <option value="″">″ : seconde (angle)</option>
+          <option value="→ (vecteur)">→ : vecteur</option>
+          <option value="∶">∶ : ratio</option>
           <option value="{}">{} : ensemble</option>
           <option value="()">() : fonction</option>
           <option value="[...]">[...] : suite</option>
         </optgroup>
-
-        <optgroup label="── Notations spéciales ──">
-          <option value="(a,b)">(a, b) : intervalle ouvert</option>
-          <option value="[a,b]">[a, b] : intervalle fermé</option>
-          <option value="[a,b)">[a, b) : intervalle semi-ouvert</option>
-          <option value="(a,b]">(a, b] : intervalle semi-ouvert</option>
+        <optgroup label="Notations spéciales">
+          <option value="(a, b)">(a, b) : intervalle ouvert</option>
+          <option value="[a, b]">[a, b] : intervalle fermé</option>
+          <option value="[a, b)">[a, b) : intervalle semi-ouvert</option>
+          <option value="(a, b]">(a, b] : intervalle semi-ouvert</option>
           <option value="ℓ">ℓ : droite</option>
           <option value="(P)">(P) : plan</option>
           <option value="(S)">(S) : solide</option>
-          <option value="∀ε>0">∀ε > 0 : pour tout epsilon positif</option>
-          <option value="∃δ>0">∃δ > 0 : il existe un delta positif</option>
+          <option value="∀ε > 0">∀ε > 0 : pour tout epsilon positif</option>
+          <option value="∃δ > 0">∃δ > 0 : il existe un delta positif</option>
         </optgroup>
       </select>
       <button class="btn-3d" onclick="insererFractionBloc()">➕ Insérer Fraction (Barre Horizontale)</button>
@@ -1187,19 +1010,11 @@
       <button class="btn-3d" onclick="setTheme('lavender')">🌸 Lavande</button>
       <button class="btn-3d" onclick="setTheme('sand')">🌾 Sable</button>
     </div>
-
-    <div class="menu-group">
-      <div class="menu-title">⚙️ Cadran Schéma</div>
-      <button class="btn-3d" onclick="afficherCadran()">➕ Afficher Cadran libre</button>
-      <button class="btn-3d" onclick="masquerCadran()" style="color: #ef4444;">❌ Masquer Cadran</button>
-    </div>
   </aside>
 
-  <!-- CONTENEUR DU ZOOM ACTIF -->
   <div class="zoom-viewport" id="zoomViewport">
     <div class="workspace-scaler" id="workspaceScaler">
       
-      <!-- PAGE A4 N°1 -->
       <div class="a4-container lined" id="a4Page">
         
         <div class="watermark-overlay" id="watermark" onclick="selectElement(this)">CORRECTION OFFICIELLE</div>
@@ -1224,7 +1039,6 @@
           <canvas id="schemaCanvas"></canvas>
         </div>
 
-        <!-- Zone d'édition -->
         <div class="a4-editor" id="editor" contenteditable="true" onclick="positionnerCurseurDirect(event)">Toucher ici pour commencer à écrire...</div>
 
       </div>
@@ -1232,11 +1046,10 @@
     </div>
   </div>
 
-  <!-- PANNEAU DE CONTRÔLE FIXÉ EN BAS -->
   <div class="control-panel-fixed">
     <div class="panel-header">
       <span>🎮 PANNEAU DE CONTRÔLE ACTIF</span>
-      <span style="font-size:0.7rem; color:#94a3b8;">Cliquez sur un élément pour l'ajuster</span>
+      <span style="font-size:0.7rem; color:#94a3b8;">Ajustez vos éléments avec précision</span>
     </div>
 
     <div class="panel-grid">
@@ -1324,40 +1137,27 @@
 
     let selectedEl = null;
 
-    /* DÉFINITION DES SCHÉMAS ET FORMES STANDARDS */
+    function appliquerCadreTexte(className) {
+      const selection = window.getSelection();
+      if (!selection.rangeCount || selection.isCollapsed) {
+        alert("Veuillez d'abord sélectionner un mot, un groupe de mots ou une phrase dans le texte.");
+        return;
+      }
+      const range = selection.getRangeAt(0);
+      const span = document.createElement('span');
+      span.className = className;
+      span.appendChild(range.extractContents());
+      range.insertNode(span);
+      selection.removeAllRanges();
+    }
+
     const SVG_TEMPLATES = {
       resistor: `<svg viewBox="0 0 100 40"><line x1="0" y1="20" x2="20" y2="20" stroke="#000" stroke-width="3"/><rect x="20" y="5" width="60" height="30" fill="none" stroke="#000" stroke-width="3"/><line x1="80" y1="20" x2="100" y2="20" stroke="#000" stroke-width="3"/></svg>`,
-      capacitor: `<svg viewBox="0 0 100 40"><line x1="0" y1="20" x2="42" y2="20" stroke="#000" stroke-width="3"/><line x1="42" y1="5" x2="42" y2="35" stroke="#000" stroke-width="3"/><line x1="58" y1="5" x2="58" y2="35" stroke="#000" stroke-width="3"/><line x1="58" y1="20" x2="100" y2="20" stroke="#000" stroke-width="3"/></svg>`,
-      inductor: `<svg viewBox="0 0 100 40"><line x1="0" y1="20" x2="10" y2="20" stroke="#000" stroke-width="3"/><path d="M 10,20 Q 20,0 30,20 Q 40,0 50,20 Q 60,0 70,20 Q 80,0 90,20" fill="none" stroke="#000" stroke-width="3"/><line x1="90" y1="20" x2="100" y2="20" stroke="#000" stroke-width="3"/></svg>`,
-      source: `<svg viewBox="0 0 100 40"><line x1="0" y1="20" x2="40" y2="20" stroke="#000" stroke-width="3"/><line x1="40" y1="5" x2="40" y2="35" stroke="#000" stroke-width="4"/><line x1="60" y1="12" x2="60" y2="28" stroke="#000" stroke-width="2"/><line x1="60" y1="20" x2="100" y2="20" stroke="#000" stroke-width="3"/><text x="25" y="15" font-size="14" font-weight="bold">+</text></svg>`,
-      ground: `<svg viewBox="0 0 60 60"><line x1="30" y1="0" x2="30" y2="30" stroke="#000" stroke-width="3"/><line x1="10" y1="30" x2="50" y2="30" stroke="#000" stroke-width="4"/><line x1="20" y1="40" x2="40" y2="40" stroke="#000" stroke-width="3"/><line x1="25" y1="50" x2="35" y2="50" stroke="#000" stroke-width="2"/></svg>`,
-      switch: `<svg viewBox="0 0 100 40"><line x1="0" y1="20" x2="20" y2="20" stroke="#000" stroke-width="3"/><circle cx="20" cy="20" r="4" fill="#000"/><line x1="20" y1="20" x2="75" y2="5" stroke="#000" stroke-width="3"/><circle cx="80" cy="20" r="4" fill="#000"/><line x1="80" y1="20" x2="100" y2="20" stroke="#000" stroke-width="3"/></svg>`,
-      motor: `<svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="30" fill="none" stroke="#000" stroke-width="3"/><text x="40" y="48" font-size="24" font-weight="bold" text-anchor="middle">M</text><line x1="0" y1="40" x2="10" y2="40" stroke="#000" stroke-width="3"/><line x1="70" y1="40" x2="80" y2="40" stroke="#000" stroke-width="3"/></svg>`,
       line: `<svg viewBox="0 0 120 20"><line x1="0" y1="10" x2="120" y2="10" stroke="#000" stroke-width="3"/></svg>`,
       dashed: `<svg viewBox="0 0 120 20"><line x1="0" y1="10" x2="120" y2="10" stroke="#000" stroke-width="3" stroke-dasharray="6,6"/></svg>`,
-      dashdot: `<svg viewBox="0 0 120 20"><line x1="0" y1="10" x2="120" y2="10" stroke="#000" stroke-width="3" stroke-dasharray="10,4,2,4"/></svg>`,
       arrow: `<svg viewBox="0 0 120 20"><defs><marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#000"/></marker></defs><line x1="0" y1="10" x2="110" y2="10" stroke="#000" stroke-width="3" marker-end="url(#arr)"/></svg>`,
-      double_arrow: `<svg viewBox="0 0 120 20"><defs><marker id="arr2" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#000"/></marker></defs><line x1="10" y1="10" x2="110" y2="10" stroke="#000" stroke-width="3" marker-start="url(#arr2)" marker-end="url(#arr2)"/></svg>`,
-      arrow_right: `<svg viewBox="0 0 100 40"><path d="M 0 10 L 60 10 L 60 0 L 100 20 L 60 40 L 60 30 L 0 30 Z" fill="#000"/></svg>`,
-      arrow_left: `<svg viewBox="0 0 100 40"><path d="M 100 10 L 40 10 L 40 0 L 0 20 L 40 40 L 40 30 L 100 30 Z" fill="#000"/></svg>`,
-      arrow_up: `<svg viewBox="0 0 40 100"><path d="M 10 100 L 10 40 L 0 40 L 20 0 L 40 40 L 30 40 L 30 100 Z" fill="#000"/></svg>`,
-      arrow_down: `<svg viewBox="0 0 40 100"><path d="M 10 0 L 10 60 L 0 60 L 20 100 L 40 60 L 30 60 L 30 0 Z" fill="#000"/></svg>`,
-      curve: `<svg viewBox="0 0 100 60"><path d="M 10 50 Q 50 0 90 50" stroke="#000" stroke-width="3" fill="none"/></svg>`,
       rect: `<svg viewBox="0 0 100 60"><rect x="3" y="3" width="94" height="54" fill="none" stroke="#000" stroke-width="3"/></svg>`,
-      round_rect: `<svg viewBox="0 0 100 60"><rect x="3" y="3" width="94" height="54" rx="10" fill="none" stroke="#000" stroke-width="3"/></svg>`,
-      circle: `<svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="#000" stroke-width="3"/></svg>`,
-      triangle: `<svg viewBox="0 0 80 80"><polygon points="40,4 76,76 4,76" fill="none" stroke="#000" stroke-width="3"/></svg>`,
-      diamond: `<svg viewBox="0 0 100 60"><polygon points="50,3 97,30 50,57 3,30" fill="none" stroke="#000" stroke-width="3"/></svg>`,
-      trapezoid: `<svg viewBox="0 0 100 60"><polygon points="20,3 80,3 97,57 3,57" fill="none" stroke="#000" stroke-width="3"/></svg>`,
-      parallelogram: `<svg viewBox="0 0 100 60"><polygon points="20,3 97,3 80,57 3,57" fill="none" stroke="#000" stroke-width="3"/></svg>`,
-      star: `<svg viewBox="0 0 80 80"><polygon points="40,2 51,25 78,28 58,46 64,73 40,59 16,73 22,46 2,28 29,25" fill="none" stroke="#000" stroke-width="3"/></svg>`,
-      cross: `<svg viewBox="0 0 80 80"><polygon points="28,2 52,2 52,28 78,28 78,52 52,52 52,78 28,78 28,52 2,52 2,28 28,28" fill="none" stroke="#000" stroke-width="3"/></svg>`,
-      flow_process: `<svg viewBox="0 0 100 50"><rect x="3" y="3" width="94" height="44" fill="none" stroke="#000" stroke-width="3"/></svg>`,
-      flow_decision: `<svg viewBox="0 0 100 60"><polygon points="50,3 97,30 50,57 3,30" fill="none" stroke="#000" stroke-width="3"/></svg>`,
-      flow_terminator: `<svg viewBox="0 0 100 50"><rect x="3" y="3" width="94" height="44" rx="22" fill="none" stroke="#000" stroke-width="3"/></svg>`,
-      flow_data: `<svg viewBox="0 0 100 50"><polygon points="15,3 97,3 85,47 3,47" fill="none" stroke="#000" stroke-width="3"/></svg>`,
-      callout_rect: `<svg viewBox="0 0 100 70"><path d="M 3 3 L 97 3 L 97 47 L 40 47 L 20 67 L 25 47 L 3 47 Z" fill="none" stroke="#000" stroke-width="3"/></svg>`,
-      callout_cloud: `<svg viewBox="0 0 100 70"><path d="M 20 40 Q 10 20 30 10 Q 50 0 70 10 Q 90 20 80 40 Q 95 55 70 60 Q 50 65 30 60 Q 5 55 20 40 Z" fill="none" stroke="#000" stroke-width="3"/></svg>`
+      circle: `<svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="#000" stroke-width="3"/></svg>`
     };
 
     function toggleShapesAccordion() {
@@ -1379,7 +1179,6 @@
       }
     }
 
-    /* FONCTION D'IMPORTATION DU REPÈRE AUTONOME EXTERNE EN FORMAT SVG VECTORIEL */
     function importerRepereAutonome(event) {
       const file = event.target.files[0];
       if (file) {
@@ -1403,15 +1202,12 @@
             document.getElementById('a4Page').appendChild(container);
             makeElementInteractive(container);
             selectElement(container);
-          } else {
-            alert("Format SVG invalide ou vide.");
           }
         };
         reader.readAsText(file);
       }
     }
 
-    /* FONCTION D'INSERTION DE TABLEAU ÉDITABLE PERSONNALISÉ */
     function insererTableauPersonnalise() {
       const lignes = parseInt(document.getElementById('customRows').value) || 3;
       const colonnes = parseInt(document.getElementById('customCols').value) || 3;
@@ -1431,7 +1227,7 @@
       tableHTML += `</table>`;
       
       container.innerHTML = tableHTML;
-      container.style.top = (300 + (document.querySelectorAll('.inserted-table-container').length * 20)) + 'px';
+      container.style.top = '300px';
       container.style.left = '250px';
 
       currentPage.appendChild(container);
@@ -1439,7 +1235,6 @@
       selectElement(container);
     }
 
-    /* INSERER UNE FORME SVG DIRECTEMENT SUR LE DOCUMENT A4 ET RENDRE INTERACTIVE */
     function insererFormeInsee(toolKey) {
       const currentPage = document.getElementById('a4Page');
       const container = document.createElement('div');
@@ -1448,7 +1243,7 @@
 
       container.style.width = '160px';
       container.style.height = '120px';
-      container.style.top = (250 + (document.querySelectorAll('.inserted-shape').length * 15)) + 'px';
+      container.style.top = '250px';
       container.style.left = '320px';
 
       currentPage.appendChild(container);
@@ -1456,7 +1251,6 @@
       selectElement(container);
     }
 
-    /* RENDRE N'IMPORTE QUEL ÉLÉMENT GLISSABLE AU DOIGT/SOURIS SUR LE DOCUMENT */
     function makeElementInteractive(el) {
       let isDragging = false;
       let startTouchX = 0, startTouchY = 0;
@@ -1486,9 +1280,7 @@
         e.preventDefault();
       }
 
-      function onEnd() {
-        isDragging = false;
-      }
+      function onEnd() { isDragging = false; }
 
       el.addEventListener('mousedown', onStart);
       el.addEventListener('touchstart', onStart, { passive: false });
@@ -1505,28 +1297,12 @@
       }
     }
 
-    /* FONCTIONS DE FORMATAGE DE TEXTE DU VOLET LATÉRAL */
-    function formatText(command, value = null) {
-      document.execCommand(command, false, value);
-    }
+    function formatText(command, value = null) { document.execCommand(command, false, value); }
+    function applyTextColor(color) { document.execCommand('foreColor', false, color); }
+    function applyBgColor(color) { document.execCommand('hiliteColor', false, color); }
+    function applyFontSize(size) { if(size) document.execCommand('fontSize', false, size); }
+    function applyFontName(font) { if(font) document.execCommand('fontName', false, font); }
 
-    function applyTextColor(color) {
-      document.execCommand('foreColor', false, color);
-    }
-
-    function applyBgColor(color) {
-      document.execCommand('hiliteColor', false, color);
-    }
-
-    function applyFontSize(size) {
-      if(size) document.execCommand('fontSize', false, size);
-    }
-
-    function applyFontName(font) {
-      if(font) document.execCommand('fontName', false, font);
-    }
-
-    /* FONCTION D'IMPRESSION PROPRE */
     function imprimerPDF() {
       if (selectedEl) {
         selectedEl.classList.remove('selected');
@@ -1535,44 +1311,13 @@
       window.print();
     }
 
-    /* POSITIONNEMENT DU CURSEUR LÀ OÙ ON APPUIT SUR L'ÉCRAN */
     function positionnerCurseurDirect(e) {
       const editor = e.currentTarget;
-      
       if (editor.innerText.trim() === "Toucher ici pour commencer à écrire...") {
         editor.innerText = "";
       }
-
-      const rect = editor.getBoundingClientRect();
-      const clickY = e.clientY - rect.top;
-      const lineHeight = 28;
-      const targetLine = Math.floor(clickY / lineHeight);
-
-      let currentLines = editor.innerText.split('\n').length;
-
-      if (targetLine >= currentLines) {
-        let missingLines = targetLine - currentLines + 1;
-        for (let i = 0; i < missingLines; i++) {
-          editor.innerText += '\n';
-        }
-      }
-
-      let range, sel;
-      if (document.caretRangeFromPoint) {
-        range = document.caretRangeFromPoint(e.clientX, e.clientY);
-      } else if (e.rangeParent) {
-        range = document.createRange();
-        range.setStart(e.rangeParent, e.rangeOffset);
-      }
-
-      if (range) {
-        sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-      }
     }
 
-    /* GESTION FERMETURE DU MENU LATÉRAL */
     function toggleSidebar(e) {
       if (e) e.stopPropagation();
       sidebar.classList.toggle('open');
@@ -1586,7 +1331,6 @@
       }
     });
 
-    /* GESTION DU FILIGRANE */
     function toggleWatermark(show) {
       const wm = document.getElementById('watermark');
       if (show) {
@@ -1600,10 +1344,9 @@
       }
     }
 
-    /* GESTION DU ZOOM GLOBAL */
     let currentZoom = 1.0;
-    const minZoom = 0.3;
-    const maxZoom = 2.5;
+    const minZoom = 0.5;
+    const maxZoom = 3.0;
 
     function updateZoomUI() {
       workspaceScaler.style.transform = `scale(${currentZoom})`;
@@ -1616,46 +1359,13 @@
     }
 
     function resetZoom() {
-      const screenW = window.innerWidth;
-      if (screenW < 800) {
-        currentZoom = (screenW - 20) / 800;
-      } else {
-        currentZoom = 1.0;
-      }
+      currentZoom = 1.0;
       updateZoomUI();
     }
-
-    let initialTouchDistance = 0;
-    let initialZoomOnTouch = 1.0;
-
-    zoomViewport.addEventListener('touchstart', (e) => {
-      if (e.touches.length === 2) {
-        initialTouchDistance = Math.hypot(
-          e.touches[0].clientX - e.touches[1].clientX,
-          e.touches[0].clientY - e.touches[1].clientY
-        );
-        initialZoomOnTouch = currentZoom;
-      }
-    }, { passive: true });
-
-    zoomViewport.addEventListener('touchmove', (e) => {
-      if (e.touches.length === 2) {
-        const currentDistance = Math.hypot(
-          e.touches[0].clientX - e.touches[1].clientX,
-          e.touches[0].clientY - e.touches[1].clientY
-        );
-        if (initialTouchDistance > 0) {
-          const factor = currentDistance / initialTouchDistance;
-          currentZoom = Math.min(maxZoom, Math.max(minZoom, initialZoomOnTouch * factor));
-          updateZoomUI();
-        }
-      }
-    }, { passive: true });
 
     window.addEventListener('load', () => {
       resetZoom();
       fitCanvasSize();
-      chargerListeSauvegardes();
     });
 
     let state = { x: 0, y: 0, fontSize: 64, opacity: 1, rotation: 0 };
@@ -1666,17 +1376,7 @@
       selectedEl = el;
       if (selectedEl) {
         selectedEl.classList.add('selected');
-        state.rotation = getRotationAngle(selectedEl);
       }
-    }
-
-    function getRotationAngle(target) {
-      const tr = window.getComputedStyle(target).getPropertyValue("transform");
-      if (tr === 'none' || !tr) return 0;
-      const values = tr.split('(')[1].split(')')[0].split(',');
-      const a = values[0];
-      const b = values[1];
-      return Math.round(Math.atan2(b, a) * (180/Math.PI));
     }
 
     function adjStep(type, val) {
@@ -1691,10 +1391,6 @@
         let currentT = selectedEl.offsetTop || 0;
         selectedEl.style.left = (currentL + dx * steps.move) + 'px';
         selectedEl.style.top = (currentT + dy * steps.move) + 'px';
-      } else {
-        state.x += dx * steps.move;
-        state.y += dy * steps.move;
-        applyTransforms();
       }
     }
 
@@ -1713,30 +1409,19 @@
     function adjustOpacity(dir) {
       if (!selectedEl) return;
       let currentOp = parseFloat(window.getComputedStyle(selectedEl).opacity) || 1;
-      let newOp = Math.min(1, Math.max(0.05, currentOp + (dir * steps.opac * 0.02)));
-      selectedEl.style.opacity = newOp;
+      selectedEl.style.opacity = Math.min(1, Math.max(0.05, currentOp + (dir * steps.opac * 0.02)));
     }
 
     function rotateElement(dir) {
       if (!selectedEl) return;
       state.rotation += dir * steps.rot * 5;
-      applyTransforms();
+      selectedEl.style.transform = `rotate(${state.rotation}deg)`;
     }
 
     function resetTransforms() {
-      state.x = 0; state.y = 0; state.rotation = 0; state.opacity = 1;
       if (selectedEl) {
         selectedEl.style.opacity = '1';
-        applyTransforms();
-      }
-    }
-
-    function applyTransforms() {
-      if (!selectedEl) return;
-      if (selectedEl.classList.contains('watermark-overlay')) {
-        selectedEl.style.transform = `translate(-50%, -50%) translate(${state.x}px, ${state.y}px) rotate(${state.rotation}deg)`;
-      } else {
-        selectedEl.style.transform = `rotate(${state.rotation}deg)`;
+        selectedEl.style.transform = 'none';
       }
     }
 
@@ -1794,51 +1479,20 @@
     }
 
     function setTheme(theme) { document.body.setAttribute('data-theme', theme); }
-    function masquerCadran() { 
-      const activeDragContainer = document.getElementById('draggableCanvas');
-      if (activeDragContainer) {
-        activeDragContainer.style.display = 'none'; 
-      }
-    }
-    function afficherCadran() { 
-      const activeDragContainer = document.getElementById('draggableCanvas');
-      if (activeDragContainer) {
-        activeDragContainer.style.display = 'flex'; 
-        fitCanvasSize();
-      }
-    }
+    function masquerCadran() { document.getElementById('draggableCanvas').style.display = 'none'; }
+    function afficherCadran() { document.getElementById('draggableCanvas').style.display = 'flex'; fitCanvasSize(); }
 
     function fitCanvasSize() {
-      const activeCanvas = document.getElementById('schemaCanvas');
-      const activeDragContainer = document.getElementById('draggableCanvas');
-      if (activeCanvas && activeDragContainer) {
-        activeCanvas.width = activeDragContainer.clientWidth;
-        activeCanvas.height = activeDragContainer.clientHeight - 30;
+      if (canvas && dragContainer) {
+        canvas.width = dragContainer.clientWidth;
+        canvas.height = dragContainer.clientHeight - 30;
       }
     }
 
     let currentTool = 'line';
-    let isDrawing = false;
-    let startX = 0, startY = 0;
-    let pathPoints = [];
-
     function setTool(tool) {
       currentTool = tool;
-      const toolNames = { 
-        'line':'Trait Plein', 'dashed':'Pointillés', 'dashdot':'Trait Mixte',
-        'arrow':'Flèche Simple', 'double_arrow':'Double Flèche', 'curve':'Ligne Courbe', 'freehand':'Tracé Libre',
-        'rect':'Rectangle', 'round_rect':'Rect. Arrondi', 'circle':'Cercle / Ellipse', 'triangle':'Triangle',
-        'diamond':'Losange', 'trapezoid':'Trapèze', 'parallelogram':'Parallélogramme', 'star':'Étoile', 'cross':'Croix',
-        'arrow_right':'Flèche Droite', 'arrow_left':'Flèche Gauche', 'arrow_up':'Flèche Haut', 'arrow_down':'Flèche Bas', 'arrow_4way':'Flèche 4-Voies',
-        'flow_process':'Processus', 'flow_decision':'Décision', 'flow_terminator':'Début/Fin', 'flow_data':'Données E/S',
-        'callout_rect':'Bulle Rectangulaire', 'callout_cloud':'Bulle Nuage',
-        'smartart':'SmartArt Bloc', 'chart_bar':'Graphique Bâtons', 'icon_symbol':'Icône', 'model_3d':'Modèle 3D',
-        'resistor':'Résistance', 'capacitor':'Condensateur', 'inductor':'Bobine',
-        'source':'Pile / Source', 'ground':'Masse', 'switch':'Interrupteur', 'motor':'Moteur'
-      };
-      if (toolBadge) {
-        toolBadge.textContent = 'Outil : ' + (toolNames[tool] || tool);
-      }
+      if (toolBadge) toolBadge.textContent = 'Outil : ' + tool;
     }
 
     function insererSymbolSelect(selectObj) {
@@ -1846,7 +1500,6 @@
     }
 
     function insererTexte(text) {
-      const editor = document.getElementById('editor');
       document.execCommand('insertText', false, text);
     }
 
@@ -1873,11 +1526,6 @@
 
       range.deleteContents();
       range.insertNode(fracSpan);
-
-      const newRange = document.createRange();
-      newRange.selectNodeContents(numSpan);
-      sel.removeAllRanges();
-      sel.addRange(newRange);
     }
 
     let activeDrag = false, currentX = 0, currentY = 0, initialX = 0, initialY = 0;
@@ -1885,401 +1533,17 @@
     dragHandle.addEventListener("mousedown", dragStart);
     document.addEventListener("mouseup", dragEnd);
     document.addEventListener("mousemove", drag);
-    dragHandle.addEventListener("touchstart", dragStart, {passive: false});
-    document.addEventListener("touchend", dragEnd);
-    document.addEventListener("touchmove", drag, {passive: false});
 
     function dragStart(e) {
-      if (e.touches && e.touches.length > 1) return;
-      const clientX = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
-      const clientY = e.type === "touchstart" ? e.touches[0].clientY : e.clientY;
-      initialX = clientX - currentX; initialY = clientY - currentY;
+      initialX = e.clientX - currentX; initialY = e.clientY - currentY;
       activeDrag = true;
     }
-
     function dragEnd() { activeDrag = false; }
-
     function drag(e) {
       if (activeDrag) {
         e.preventDefault();
-        const clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
-        const clientY = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
-        currentX = clientX - initialX; currentY = clientY - initialY;
+        currentX = e.clientX - initialX; currentY = e.clientY - initialY;
         dragContainer.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-      }
-    }
-
-    function getCoords(e) {
-      const rect = canvas.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      return { x: (clientX - rect.left) / currentZoom, y: (clientY - rect.top) / currentZoom };
-    }
-
-    function startDraw(e) {
-      if (e.touches && e.touches.length > 1) return;
-      isDrawing = true;
-      const c = getCoords(e); startX = c.x; startY = c.y;
-      pathPoints = [{x: startX, y: startY}];
-    }
-
-    function drawDuringMove(e) {
-      if (!isDrawing) return;
-      if (currentTool === 'freehand') {
-        const c = getCoords(e);
-        pathPoints.push(c);
-        ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(pathPoints[pathPoints.length - 2].x, pathPoints[pathPoints.length - 2].y);
-        ctx.lineTo(c.x, c.y);
-        ctx.stroke();
-      }
-    }
-
-    function drawArrowHead(x, y, angle) {
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x - 10 * Math.cos(angle - Math.PI / 6), y - 10 * Math.sin(angle - Math.PI / 6));
-      ctx.lineTo(x - 10 * Math.cos(angle + Math.PI / 6), y - 10 * Math.sin(angle + Math.PI / 6));
-      ctx.closePath();
-      ctx.fill();
-    }
-
-    function endDraw(e) {
-      if (!isDrawing) return;
-      const c = getCoords(e); const endX = c.x, endY = c.y;
-      const w = endX - startX, h = endY - startY;
-      ctx.strokeStyle = '#0f172a'; ctx.fillStyle = '#0f172a'; ctx.lineWidth = 2;
-      ctx.setLineDash([]);
-      ctx.beginPath();
-
-      if (currentTool === 'line') {
-        ctx.moveTo(startX, startY); ctx.lineTo(endX, endY); ctx.stroke();
-      } 
-      else if (currentTool === 'dashed') {
-        ctx.setLineDash([6, 6]);
-        ctx.moveTo(startX, startY); ctx.lineTo(endX, endY); ctx.stroke();
-      } 
-      else if (currentTool === 'dashdot') {
-        ctx.setLineDash([10, 4, 2, 4]);
-        ctx.moveTo(startX, startY); ctx.lineTo(endX, endY); ctx.stroke();
-      } 
-      else if (currentTool === 'arrow') {
-        ctx.moveTo(startX, startY); ctx.lineTo(endX, endY); ctx.stroke();
-        const angle = Math.atan2(endY - startY, endX - startX);
-        drawArrowHead(endX, endY, angle);
-      } 
-      else if (currentTool === 'double_arrow') {
-        ctx.moveTo(startX, startY); ctx.lineTo(endX, endY); ctx.stroke();
-        const angle = Math.atan2(endY - startY, endX - startX);
-        drawArrowHead(endX, endY, angle);
-        drawArrowHead(startX, startY, angle + Math.PI);
-      } 
-      else if (currentTool === 'curve') {
-        ctx.moveTo(startX, startY);
-        ctx.quadraticCurveTo(startX + w/2, startY - 40, endX, endY);
-        ctx.stroke();
-      }
-      else if (currentTool === 'rect' || currentTool === 'flow_process') {
-        ctx.strokeRect(startX, startY, w, h);
-      } 
-      else if (currentTool === 'round_rect') {
-        let r = 10;
-        ctx.roundRect(startX, startY, w, h, r);
-        ctx.stroke();
-      }
-      else if (currentTool === 'circle') {
-        let r = Math.sqrt(w*w + h*h);
-        ctx.arc(startX, startY, r, 0, 2 * Math.PI); ctx.stroke();
-      } 
-      else if (currentTool === 'flow_terminator') {
-        ctx.ellipse(startX + w/2, startY + h/2, Math.abs(w/2), Math.abs(h/2), 0, 0, 2 * Math.PI);
-        ctx.stroke();
-      }
-      else if (currentTool === 'triangle') {
-        ctx.moveTo(startX + w/2, startY); ctx.lineTo(endX, endY); ctx.lineTo(startX, endY); ctx.closePath(); ctx.stroke();
-      } 
-      else if (currentTool === 'diamond' || currentTool === 'flow_decision') {
-        ctx.moveTo(startX + w/2, startY); ctx.lineTo(endX, startY + h/2);
-        ctx.lineTo(startX + w/2, endY); ctx.lineTo(startX, startY + h/2); ctx.closePath(); ctx.stroke();
-      }
-      else if (currentTool === 'parallelogram' || currentTool === 'flow_data') {
-        let shift = w * 0.2;
-        ctx.moveTo(startX + shift, startY); ctx.lineTo(endX, startY);
-        ctx.lineTo(endX - shift, endY); ctx.lineTo(startX, endY); ctx.closePath(); ctx.stroke();
-      }
-      else if (currentTool === 'trapezoid') {
-        let shift = w * 0.2;
-        ctx.moveTo(startX + shift, startY); ctx.lineTo(endX - shift, startY);
-        ctx.lineTo(endX, endY); ctx.lineTo(startX, endY); ctx.closePath(); ctx.stroke();
-      }
-      else if (currentTool === 'star') {
-        let cx = startX + w/2, cy = startY + h/2, outerR = Math.abs(w/2), innerR = outerR / 2;
-        for (let i = 0; i < 5; i++) {
-          ctx.lineTo(cx + Math.cos((18 + i * 72) * Math.PI / 180) * outerR, cy - Math.sin((18 + i * 72) * Math.PI / 180) * outerR);
-          ctx.lineTo(cx + Math.cos((54 + i * 72) * Math.PI / 180) * innerR, cy - Math.sin((54 + i * 72) * Math.PI / 180) * innerR);
-        }
-        ctx.closePath(); ctx.stroke();
-      }
-      else if (currentTool === 'cross') {
-        let kw = w / 3, kh = h / 3;
-        ctx.moveTo(startX + kw, startY); ctx.lineTo(startX + 2*kw, startY);
-        ctx.lineTo(startX + 2*kw, startY + kh); ctx.lineTo(endX, startY + kh);
-        ctx.lineTo(endX, startY + 2*kh); ctx.lineTo(startX + 2*kw, startY + 2*kh);
-        ctx.lineTo(startX + 2*kw, endY); ctx.lineTo(startX + kw, endY);
-        ctx.lineTo(startX + kw, startY + 2*kh); ctx.lineTo(startX, startY + 2*kh);
-        ctx.lineTo(startX, startY + kh); ctx.lineTo(startX + kw, startY + kh);
-        ctx.closePath(); ctx.stroke();
-      }
-      else if (currentTool === 'arrow_right') {
-        ctx.moveTo(startX, startY + h*0.25); ctx.lineTo(startX + w*0.6, startY + h*0.25);
-        ctx.lineTo(startX + w*0.6, startY); ctx.lineTo(endX, startY + h*0.5);
-        ctx.lineTo(startX + w*0.6, endY); ctx.lineTo(startX + w*0.6, startY + h*0.75);
-        ctx.lineTo(startX, startY + h*0.75); ctx.closePath(); ctx.stroke();
-      }
-      else if (currentTool === 'arrow_left') {
-        ctx.moveTo(endX, startY + h*0.25); ctx.lineTo(startX + w*0.4, startY + h*0.25);
-        ctx.lineTo(startX + w*0.4, startY); ctx.lineTo(startX, startY + h*0.5);
-        ctx.lineTo(startX + w*0.4, endY); ctx.lineTo(startX + w*0.4, startY + h*0.75);
-        ctx.lineTo(endX, startY + h*0.75); ctx.closePath(); ctx.stroke();
-      }
-      else if (currentTool === 'arrow_up') {
-        ctx.moveTo(startX + w*0.25, endY); ctx.lineTo(startX + w*0.25, startY + h*0.4);
-        ctx.lineTo(startX, startY + h*0.4); ctx.lineTo(startX + w*0.5, startY);
-        ctx.lineTo(endX, startY + h*0.4); ctx.lineTo(startX + w*0.75, startY + h*0.4);
-        ctx.lineTo(startX + w*0.75, endY); ctx.closePath(); ctx.stroke();
-      }
-      else if (currentTool === 'arrow_down') {
-        ctx.moveTo(startX + w*0.25, startY); ctx.lineTo(startX + w*0.25, startY + h*0.6);
-        ctx.lineTo(startX, startY + h*0.6); ctx.lineTo(startX + w*0.5, endY);
-        ctx.lineTo(endX, startY + h*0.6); ctx.lineTo(startX + w*0.75, startY + h*0.6);
-        ctx.lineTo(startX + w*0.75, startY); ctx.closePath(); ctx.stroke();
-      }
-      else if (currentTool === 'arrow_4way') {
-        let cx = startX + w/2, cy = startY + h/2;
-        ctx.moveTo(cx - 5, cy - 5); ctx.lineTo(cx - 5, startY + 10); ctx.lineTo(cx - 12, startY + 10);
-        ctx.lineTo(cx, startY); ctx.lineTo(cx + 12, startY + 10); ctx.lineTo(cx + 5, startY + 10);
-        ctx.lineTo(cx + 5, cy - 5); ctx.lineTo(endX - 10, cy - 5); ctx.lineTo(endX - 10, cy - 12);
-        ctx.lineTo(endX, cy); ctx.lineTo(endX - 10, cy + 12); ctx.lineTo(endX - 10, cy + 5);
-        ctx.lineTo(cx + 5, cy + 5); ctx.lineTo(cx + 5, endY - 10); ctx.lineTo(cx + 12, endY - 10);
-        ctx.lineTo(cx, endY); ctx.lineTo(cx - 12, endY - 10); ctx.lineTo(cx - 5, endY - 10);
-        ctx.lineTo(cx - 5, cy + 5); ctx.lineTo(startX + 10, cy + 5); ctx.lineTo(startX + 10, cy + 12);
-        ctx.lineTo(startX, cy); ctx.lineTo(startX + 10, cy - 12); ctx.lineTo(startX + 10, cy - 5);
-        ctx.closePath(); ctx.stroke();
-      }
-      else if (currentTool === 'callout_rect') {
-        ctx.strokeRect(startX, startY, w, h*0.75);
-        ctx.moveTo(startX + w*0.2, startY + h*0.75);
-        ctx.lineTo(startX + w*0.1, endY);
-        ctx.lineTo(startX + w*0.4, startY + h*0.75);
-        ctx.stroke();
-      }
-      else if (currentTool === 'callout_cloud') {
-        ctx.ellipse(startX + w/2, startY + h/2, Math.abs(w/2), Math.abs(h/2), 0, 0, 2 * Math.PI);
-        ctx.stroke();
-        ctx.beginPath(); ctx.arc(startX + w*0.2, endY, 4, 0, 2*Math.PI); ctx.stroke();
-        ctx.beginPath(); ctx.arc(startX + w*0.3, startY + h*0.8, 6, 0, 2*Math.PI); ctx.stroke();
-      }
-      else if (currentTool === 'smartart') {
-        let boxW = w / 3;
-        ctx.strokeRect(startX, startY, boxW - 5, h);
-        ctx.strokeRect(startX + boxW + 2.5, startY, boxW - 5, h);
-        ctx.strokeRect(startX + 2*boxW + 5, startY, boxW - 5, h);
-      }
-      else if (currentTool === 'chart_bar') {
-        ctx.moveTo(startX, startY); ctx.lineTo(startX, endY); ctx.lineTo(endX, endY); ctx.stroke();
-        let barW = w / 5;
-        ctx.fillRect(startX + barW*0.5, startY + h*0.4, barW, h*0.6);
-        ctx.fillRect(startX + barW*2, startY + h*0.2, barW, h*0.8);
-        ctx.fillRect(startX + barW*3.5, startY + h*0.6, barW, h*0.4);
-      }
-      else if (currentTool === 'icon_symbol') {
-        ctx.arc(startX + w/2, startY + h/2, Math.min(Math.abs(w), Math.abs(h))/2, 0, 2*Math.PI);
-        ctx.stroke();
-        ctx.font = '20px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText('💡', startX + w/2, startY + h/2);
-      }
-      else if (currentTool === 'model_3d') {
-        let side = Math.min(Math.abs(w), Math.abs(h));
-        ctx.strokeRect(startX, startY + side*0.3, side*0.7, side*0.7);
-        ctx.strokeRect(startX + side*0.3, startY, side*0.7, side*0.7);
-        ctx.moveTo(startX, startY + side*0.3); ctx.lineTo(startX + side*0.3, startY);
-        ctx.moveTo(startX + side*0.7, startY + side*0.3); ctx.lineTo(startX + side, startY);
-        ctx.moveTo(startX, endY); ctx.lineTo(startX + side*0.3, startY + side*0.7);
-        ctx.moveTo(startX + side*0.7, endY); ctx.lineTo(startX + side, startY + side*0.7);
-        ctx.stroke();
-      }
-      else if (currentTool === 'resistor') {
-        let rw = 60, rh = 22;
-        ctx.strokeRect(startX, startY - rh/2, rw, rh);
-        ctx.moveTo(startX - 15, startY); ctx.lineTo(startX, startY);
-        ctx.moveTo(startX + rw, startY); ctx.lineTo(startX + rw + 15, startY); ctx.stroke();
-      } 
-      else if (currentTool === 'capacitor') {
-        ctx.moveTo(startX, startY - 18); ctx.lineTo(startX, startY + 18);
-        ctx.moveTo(startX + 10, startY - 18); ctx.lineTo(startX + 10, startY + 18);
-        ctx.moveTo(startX - 12, startY); ctx.lineTo(startX, startY);
-        ctx.moveTo(startX + 10, startY); ctx.lineTo(startX + 22, startY); ctx.stroke();
-      } 
-      else if (currentTool === 'inductor') {
-        let r = 8;
-        ctx.moveTo(startX - 15, startY); ctx.lineTo(startX, startY);
-        for (let i = 0; i < 4; i++) {
-          ctx.arc(startX + r + (i * r * 1.5), startY, r, Math.PI, 0, false);
-        }
-        ctx.moveTo(startX + (4 * r * 1.5), startY); ctx.lineTo(startX + (4 * r * 1.5) + 15, startY); ctx.stroke();
-      } 
-      else if (currentTool === 'source') {
-        ctx.moveTo(startX - 15, startY); ctx.lineTo(startX, startY);
-        ctx.moveTo(startX, startY - 18); ctx.lineTo(startX, startY + 18);
-        ctx.moveTo(startX + 10, startY - 10); ctx.lineTo(startX + 10, startY + 10);
-        ctx.moveTo(startX + 10, startY); ctx.lineTo(startX + 25, startY); ctx.stroke();
-      } 
-      else if (currentTool === 'ground') {
-        ctx.moveTo(startX, startY); ctx.lineTo(startX, startY + 15);
-        ctx.moveTo(startX - 15, startY + 15); ctx.lineTo(startX + 15, startY + 15);
-        ctx.moveTo(startX - 10, startY + 20); ctx.lineTo(startX + 10, startY + 20);
-        ctx.moveTo(startX - 5, startY + 25); ctx.lineTo(startX + 5, startY + 25); ctx.stroke();
-      } 
-      else if (currentTool === 'switch') {
-        ctx.arc(startX, startY, 3, 0, 2 * Math.PI); ctx.fill();
-        ctx.beginPath(); ctx.arc(startX + 40, startY, 3, 0, 2 * Math.PI); ctx.fill();
-        ctx.beginPath(); ctx.moveTo(startX - 10, startY); ctx.lineTo(startX, startY);
-        ctx.moveTo(startX, startY); ctx.lineTo(startX + 35, startY - 15);
-        ctx.moveTo(startX + 40, startY); ctx.lineTo(startX + 50, startY); ctx.stroke();
-      } 
-      else if (currentTool === 'motor') {
-        ctx.arc(startX, startY, 20, 0, 2 * Math.PI); ctx.stroke();
-        ctx.font = 'bold 16px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText('M', startX, startY);
-        ctx.beginPath(); ctx.moveTo(startX - 35, startY); ctx.lineTo(startX - 20, startY);
-        ctx.moveTo(startX + 20, startY); ctx.lineTo(startX + 35, startY); ctx.stroke();
-      }
-
-      ctx.setLineDash([]);
-      isDrawing = false;
-    }
-
-    canvas.addEventListener('mousedown', startDraw);
-    canvas.addEventListener('mousemove', drawDuringMove);
-    canvas.addEventListener('mouseup', endDraw);
-    canvas.addEventListener('touchstart', startDraw, {passive: false});
-    canvas.addEventListener('touchmove', drawDuringMove, {passive: false});
-    canvas.addEventListener('touchend', endDraw);
-
-    function effacerCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
-
-    /* --- NOUVEAU SYSTÈME DE SAUVEGARDE ET GESTION DES ÉPREUVES --- */
-    function getStorageData() {
-      try {
-        return JSON.parse(localStorage.getItem('athemix_epreuves')) || {};
-      } catch (e) {
-        return {};
-      }
-    }
-
-    function setStorageData(data) {
-      localStorage.setItem('athemix_epreuves', JSON.stringify(data));
-    }
-
-    function sauvegarderEtatActuel() {
-      const nomInput = document.getElementById('nomEpreuveInput').value.trim() || "Épreuve sans nom";
-      const htmlContent = workspaceScaler.innerHTML;
-      
-      let storage = getStorageData();
-      storage[nomInput] = {
-        html: htmlContent,
-        pageCount: pageCount,
-        date: new Date().toLocaleString()
-      };
-      setStorageData(storage);
-      chargerListeSauvegardes();
-      alert("Épreuve '" + nomInput + "' sauvegardée avec succès !");
-    }
-
-    function chargerListeSauvegardes() {
-      const select = document.getElementById('selectSauvegardes');
-      const storage = getStorageData();
-      const currentVal = select.value;
-      
-      select.innerHTML = '<option value="" disabled selected>-- Choisir une épreuve sauvegardée --</option>';
-      
-      for (let nom in storage) {
-        const opt = document.createElement('option');
-        opt.value = nom;
-        opt.textContent = nom + " (" + storage[nom].date + ")";
-        select.appendChild(opt);
-      }
-      if (storage[currentVal]) {
-        select.value = currentVal;
-      }
-    }
-
-    function chargerEpreuveSelectionnee(nom) {
-      const storage = getStorageData();
-      if (storage[nom]) {
-        workspaceScaler.innerHTML = storage[nom].html;
-        document.getElementById('nomEpreuveInput').value = nom;
-        
-        // Ré-attacher l'interactivité aux éléments restaurés
-        document.querySelectorAll('.inserted-shape, .imported-img, .imported-svg, .inserted-table-container, .watermark-overlay').forEach(el => {
-          makeElementInteractive(el);
-        });
-      }
-    }
-
-    function creerNouvelleFeuille() {
-      if (confirm("Voulez-vous ouvrir une nouvelle feuille vierge ? (Pensez à sauvegarder votre travail actuel si ce n'est pas fait).")) {
-        workspaceScaler.innerHTML = `
-          <div class="a4-container lined" id="a4Page">
-            <div class="watermark-overlay" id="watermark" onclick="selectElement(this)">CORRECTION OFFICIELLE</div>
-            <div class="a4-header">
-              <div class="a4-header-row">
-                <input type="text" placeholder="Matière (ex: Physique / Dessin Technique)">
-                <input type="text" placeholder="Classe">
-                <input type="text" placeholder="Date: JJ/MM/AAAA">
-              </div>
-              <div class="a4-header-row">
-                <input type="text" class="author-field" placeholder="Correcteur / Auteur">
-              </div>
-            </div>
-            <div class="draggable-canvas-container" id="draggableCanvas">
-              <div class="canvas-handle" id="canvasHandle">
-                <span>✋ Déplacer le cadran</span>
-                <span class="tool-badge" id="toolBadge">Outil : Trait Plein</span>
-                <span style="cursor: pointer; font-size: 1rem;" onclick="masquerCadran()">❌</span>
-              </div>
-              <canvas id="schemaCanvas"></canvas>
-            </div>
-            <div class="a4-editor" id="editor" contenteditable="true" onclick="positionnerCurseurDirect(event)">Toucher ici pour commencer à écrire...</div>
-          </div>
-        `;
-        document.getElementById('nomEpreuveInput').value = "Nouvelle épreuve";
-        pageCount = 1;
-        
-        // Ré-initialiser les références globales du canvas après ré-injection HTML
-        const newCanvas = document.getElementById('schemaCanvas');
-        const newHandle = document.getElementById('canvasHandle');
-        if(newHandle) {
-          newHandle.addEventListener("mousedown", dragStart);
-          newHandle.addEventListener("touchstart", dragStart, {passive: false});
-        }
-        fitCanvasSize();
-      }
-    }
-
-    function supprimerEpreuveActuelle() {
-      const nom = document.getElementById('nomEpreuveInput').value.trim();
-      let storage = getStorageData();
-      if (storage[nom]) {
-        if (confirm("Voulez-vous vraiment supprimer la sauvegarde de '" + nom + "' ?")) {
-          delete storage[nom];
-          setStorageData(storage);
-          chargerListeSauvegardes();
-          alert("Sauvegarde supprimée.");
-        }
-      } else {
-        alert("Aucune sauvegarde trouvée avec ce nom exact.");
       }
     }
   </script>
