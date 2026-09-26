@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
   <title>ATHEMIX37 ESPACE CRÉATION</title>
+  <!-- Intégration de PDF.js pour la gestion et l'affichage des PDF importés -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+  </script>
   <style>
     :root {
       --bg-color: #eef2f6;
@@ -667,6 +672,13 @@
       <button class="btn-3d" onclick="supprimerEpreuveActuelle()" style="color: #ef4444;">🗑️ Supprimer cette sauvegarde</button>
     </div>
 
+    <!-- NOUVELLE OPTION : Importation PDF depuis le stockage du téléphone -->
+    <div class="menu-group" style="border-left-color: var(--panel-accent);">
+      <div class="menu-title">📂 Reprendre un Fichier PDF</div>
+      <label style="font-size: 0.75rem; font-weight: 600; margin-bottom: 6px; display: block; color: var(--text-color);">Importer un PDF depuis le stockage :</label>
+      <input type="file" id="pdfLoader" accept="application/pdf" class="custom-input" onchange="importerFichierPDF(event)">
+    </div>
+
     <div class="menu-group">
       <div class="menu-title">✍️ Formatage Texte & Titres</div>
       <div class="btn-inline-group">
@@ -1206,6 +1218,50 @@
         };
         reader.readAsText(file);
       }
+    }
+
+    // FONCTION D'IMPORTATION DE PDF DEPUIS LE STOCKAGE DU TÉLÉPHONE
+    async function importerFichierPDF(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const typedarray = new Uint8Array(e.target.result);
+
+        try {
+          const pdfDoc = await pdfjsLib.getDocument({ data: typedarray }).promise;
+          const workspace = document.getElementById('workspaceScaler');
+          workspace.innerHTML = ""; // Nettoyer l'espace de travail pour charger les pages du PDF
+
+          for (let i = 1; i <= pdfDoc.numPages; i++) {
+            const page = await pdfDoc.getPage(i);
+            const viewport = page.getViewport({ scale: 1.5 });
+
+            const pageContainer = document.createElement('div');
+            pageContainer.className = 'a4-container blank';
+            pageContainer.style.width = viewport.width + 'px';
+            pageContainer.style.height = viewport.height + 'px';
+
+            const canvasPDF = document.createElement('canvas');
+            canvasPDF.width = viewport.width;
+            canvasPDF.height = viewport.height;
+            canvasPDF.style.width = '100%';
+            canvasPDF.style.height = '100%';
+
+            pageContainer.appendChild(canvasPDF);
+            workspace.appendChild(pageContainer);
+
+            const context = canvasPDF.getContext('2d');
+            await page.render({ canvasContext: context, viewport: viewport }).promise;
+          }
+          alert("Fichier PDF importé avec succès depuis votre stockage ! Vous pouvez continuer votre travail.");
+        } catch (error) {
+          console.error("Erreur lors du chargement du PDF :", error);
+          alert("Impossible de lire ce fichier PDF.");
+        }
+      };
+      reader.readAsArrayBuffer(file);
     }
 
     function insererTableauPersonnalise() {
