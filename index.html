@@ -944,20 +944,238 @@
       <button class="btn-3d" onclick="insererTableauPersonnalise()">➕ Insérer mon Tableau</button>
     </div>
 
+    <!-- SECTION SYMBOLES MISE À JOUR EXACTEMENT COMME SUR L'IMAGE -->
     <div class="menu-group">
       <div class="menu-title">🔢 Symboles</div>
       <select class="custom-select" onchange="insererSymbolSelect(this)">
         <option value="" disabled selected>-- Insérer un symbole --</option>
-        <option value="π">π (Pi)</option>
-        <option value="∞">Infini</option>
-        <option value="√">√ (Racine)</option>
-        <option value="∑">∑ (Somme)</option>
-        <option value="∫">∫ (Intégrale)</option>
-        <option value="Δ">Δ (Delta)</option>
-        <option value="Ω">Ω (Ohm)</option>
-        <option value="µ">µ (Micro)</option>
-        <option value="λ">λ (Lambda)</option>
-        <option value="θ">θ (Theta)</option>
+        
+        <optgroup label="── Ensembles et nombres ──">
+          <option value="ℕ">ℕ : ensemble des nombres naturels</option>
+          <option value="ℤ">ℤ : ensemble des nombres entiers</option>
+          <option value="ℚ">ℚ : ensemble des nombres rationnels</option>
+          <option value="ℝ">ℝ : ensemble des nombres réels</option>
+          <option value="ℂ">ℂ : ensemble des nombres complexes</option>
+          <option value="℘(A)">℘(A) : ensemble des parties de A</option>
+          <option value="∅">∅ : ensemble vide</option>
+          <option value="∪">A ∪ B : union d'ensembles</option>
+          <option value="∩">A ∩ B : intersection d'ensembles</option>
+          <option value="∖">A \ B : différence d'ensembles</option>
+          <option value="Ac">Ac : complémentaire de A</option>
+          <option value="×">A × B : produit cartésien</option>
+        </optgroup>
+
+        <optgroup label="── Relations et appartenance ──">
+          <option value="∈">∈ : appartient à</option>
+          <option value="∉">∉ : n'appartient pas à</option>
+          <option value="⊂">⊂ : est inclus dans</option>
+          <option value="⊄">⊄ : n'est pas inclus dans</option>
+          <option value="⊆">⊆ : inclus (ou égal)</option>
+          <option value="⊇">⊇ : contient (ou égal)</option>
+          <option value="=">= : égal à</option>
+          <option value="≠">≠ : différent de</option>
+          <option value="&lt;">&lt; : strictement inférieur à</option>
+          <option value="≤">≤ : inférieur ou égal à</option>
+          <option value="&gt;">&gt; : strictement supérieur à</option>
+          <option value="≥">≥ : supérieur ou égal à</option>
+          <option value="⇔">⇔ : équivalence</option>
+          <option value="⇒">⇒ : implication</option>
+        </optgroup>
+
+        <optgroup label="── Quantificateurs et logique ──">
+          <option value="∀">∀ : pour tout</option>
+          <option value="∃">∃ : il existe</option>
+          <option value="¬">¬ : non</option>
+          <option value="∧">∧ : et</option>
+          <option value="∨">∨ : ou</option>
+          <option value="→">→ : implique</option>
+          <option value="↔">↔ : équivalent à</option>
+          <option value="⊢">⊢ : donc, par conséquent</option>
+          <option value="∴">∴ : donc</option>
+          <option value="∵">∵ : car, parce que</option>
+          <option value="()">() : parenthèses</option>
+          <option value="[]">[] : crochet</option>
+          <option value="{}">{} : accolade</option>
+        </optgroup>
+
+        <optgroup label="── Fonctions et notations ──">
+          <option value="f(x)">f(x) : fonction</option>
+          <option value="f ∘ g">f ∘ g : composition de fonctions</option>
+          <option value="f⁻¹">f⁻¹ : fonction inverse</option>
+          <option value="Df">Df : domaine de définition</option>
+          <option value="Im(f)">Im(f) : image d'une fonction</option>
+          <option value="lim">lim f(x) : limite</option>
+          <option value="f'(x)">f'(x) : dérivée</option>
+          <option value="f''(x)">f''(x) : dérivée seconde</option>
+          <option value="∫">∫ : intégrale</option>
+          <option value="∮">∮ : intégrale définie</option>
+          <option value="∑">∑ : somme (sigma)</option>
+          <option value="∏">∏ : produit (pi)</option>
+        </optgroup>
+
+        <optgroup label="── Géométrie ──">
+          <option value="∠">∠ : angle</option>
+          <option value="△">△ : triangle</option>
+          <option value="◻">◻ : carré</option>
+          <option value="◯">◯ : cercle</option>
+          <option value="⊙">⊙ : cercle (centre)</option>
+          <option value="⊥">⊥ : perpendiculaire</option>
+          <option value="∥">∥ : parallèle</option>
+          <option value="≡">≡ : égalité de segments</option>
+          <option value="≈">≈ : approximativement égal</option>
+          <option value="AB">AB : segment [AB]</option>
+          <option value="→AB">→AB : vecteur</option>
+          <option value="|AB|">|AB| : longueur</option>
+          <option value="S">S : aire</option>
+          <option value="V">V : volume</option>
+        </optgroup>
+
+        <optgroup label="── Opérations mathématiques ──">
+          <option value="+">+ : addition</option>
+          <option value="-">- : soustraction</option>
+          <option value="×">× : multiplication</option>
+          <option value="÷">÷ : division</option>
+          <option value="·">· : produit scalaire</option>
+          <option value="∧">∧ : produit vectoriel</option>
+          <option value="^">^ : puissance</option>
+          <option value="√">√ : racine carrée</option>
+          <option value="∛">∛ : racine cubique</option>
+          <option value="∜">∜ : racine n-ième</option>
+          <option value="|x|">|x| : valeur absolue</option>
+          <option value="⁄">⁄ : fraction</option>
+          <option value="%">% : pourcentage</option>
+        </optgroup>
+
+        <optgroup label="── Symboles spécifiques ──">
+          <option value="Δ">Δ : discriminant</option>
+          <option value="∑">∑ : somme</option>
+          <option value="∏">∏ : produit</option>
+          <option value="∝">∝ : proportionnel à</option>
+          <option value="∞">∞ : infini</option>
+          <option value="≈">≈ : approximation</option>
+          <option value="≡">≡ : équivalent</option>
+          <option value="≠">≠ : différent de</option>
+          <option value="≤">≤ : inférieur ou égal</option>
+          <option value="≥">≥ : supérieur ou égal</option>
+          <option value="±">± : plus ou moins</option>
+          <option value="∇">∇ : nabla (gradient)</option>
+          <option value="d/dx">d/dx : dérivée (notation opérateur)</option>
+        </optgroup>
+
+        <optgroup label="── Trigonométrie ──">
+          <option value="sin">sin : sinus</option>
+          <option value="cos">cos : cosinus</option>
+          <option value="tan">tan : tangente</option>
+          <option value="cot">cot : cotangente</option>
+          <option value="sec">sec : sécante</option>
+          <option value="csc">csc : cosécante</option>
+          <option value="π">π : pi (≈ 3,14159...)</option>
+          <option value="°">° : degré</option>
+          <option value="rad">rad : radian</option>
+          <option value="sin²">sin², cos² : au carré</option>
+          <option value="tan⁻¹">tan⁻¹ : arc tangente</option>
+          <option value="sin⁻¹">sin⁻¹ : arc sinus</option>
+        </optgroup>
+
+        <optgroup label="── Calcul différentiel et intégral ──">
+          <option value="df/dy">df/dy : différentiel</option>
+          <option value="dx">dx : dérivée</option>
+          <option value="d²y/dx²">d²y/dx² : dérivée seconde</option>
+          <option value="∫">∫ : intégrale indéfinie</option>
+          <option value="∮">∮ : intégrale définie</option>
+          <option value="∂/∂x">∂/∂x : dérivée partielle</option>
+          <option value="∇">∇ : gradient</option>
+          <option value="Δ">Δ : laplacien</option>
+          <option value="d">d : élément différentiel</option>
+          <option value="dx">dx : élément différentiel (variable)</option>
+        </optgroup>
+
+        <optgroup label="── Physique – Grandeurs et constantes ──">
+          <option value="m">m : masse</option>
+          <option value="t">t : temps</option>
+          <option value="x,y,z">x, y, z : position (coordonnées)</option>
+          <option value="v">v : vitesse</option>
+          <option value="a">a : accélération</option>
+          <option value="F">F : force</option>
+          <option value="E">E : énergie</option>
+          <option value="P">P : puissance</option>
+          <option value="ρ">ρ : densité</option>
+          <option value="P">P : pression</option>
+          <option value="T">T : température</option>
+          <option value="Q">Q : charge électrique</option>
+          <option value="V">V : potentiel électrique</option>
+          <option value="g">g : accélération de la pesanteur</option>
+          <option value="G">G : constante de gravitation</option>
+          <option value="h">h : constante de Planck</option>
+          <option value="c">c : vitesse de la lumière</option>
+          <option value="kB">kB : constante de Boltzmann</option>
+          <option value="R">R : constante des gaz parfaits</option>
+          <option value="e">e : charge élémentaire</option>
+          <option value="NA">NA : nombre d'Avogadro</option>
+          <option value="ε₀">ε₀ : permittivité du vide</option>
+          <option value="μ₀">μ₀ : perméabilité du vide</option>
+        </optgroup>
+
+        <optgroup label="── Unités (SI) ──">
+          <option value="m">m : mètre (longueur)</option>
+          <option value="kg">kg : kilogramme (masse)</option>
+          <option value="s">s : seconde (temps)</option>
+          <option value="A">A : ampère (courant électrique)</option>
+          <option value="K">K : kelvin (température)</option>
+          <option value="mol">mol : mole (quantité de matière)</option>
+          <option value="cd">cd : candela (intensité lumineuse)</option>
+        </optgroup>
+
+        <optgroup label="── Mécanique ──">
+          <option value="v">v : vitesse</option>
+          <option value="a">a : accélération</option>
+          <option value="F">F : force</option>
+          <option value="P">P : quantité de mouvement</option>
+          <option value="Ec">Ec : énergie cinétique</option>
+          <option value="Ep">Ep : énergie potentielle</option>
+          <option value="W">W : travail</option>
+          <option value="τ">τ : couple</option>
+          <option value="I">I : moment d'inertie</option>
+          <option value="L">L : moment cinétique</option>
+        </optgroup>
+
+        <optgroup label="── Électromagnétisme ──">
+          <option value="E">E : champ électrique</option>
+          <option value="B">B : champ magnétique</option>
+          <option value="Φ">Φ : flux magnétique</option>
+          <option value="U">U : tension</option>
+          <option value="I">I : intensité du courant</option>
+          <option value="R">R : résistance</option>
+          <option value="C">C : capacité</option>
+          <option value="L">L : inductance</option>
+          <option value="ε">ε : force électromotrice</option>
+          <option value="f">f : fréquence</option>
+        </optgroup>
+
+        <optgroup label="── Autres symboles courants ──">
+          <option value="%">% : pourcentage</option>
+          <option value="‰">‰ : pour mille</option>
+          <option value="°">° : degré</option>
+          <option value="'">' : minute (angle)</option>
+          <option value="''">'' : seconde (angle)</option>
+          <option value="→">→ : vecteur</option>
+          <option value=":">: : ratio</option>
+          <option value="{}">{} : ensemble</option>
+          <option value="()">() : fonction</option>
+          <option value="[...]">[...] : suite</option>
+        </optgroup>
+
+        <optgroup label="── Notations spéciales ──">
+          <option value="(a,b)">(a, b) : intervalle ouvert</option>
+          <option value="[a,b]">[a, b] : intervalle fermé</option>
+          <option value="[a,b)">[a, b) : intervalle semi-ouvert</option>
+          <option value="(a,b]">(a, b] : intervalle semi-ouvert</option>
+          <option value="ℓ">ℓ : droite</option>
+          <option value="(P)">(P) : plan</option>
+          <option value="(S)">(S) : solide</option>
+          <option value="∀ε>0">∀ε > 0 : pour tout epsilon positif</option>
+          <option value="∃δ>0">∃δ > 0 : il existe un delta positif</option>
+        </optgroup>
       </select>
       <button class="btn-3d" onclick="insererFractionBloc()">➕ Insérer Fraction (Barre Horizontale)</button>
     </div>
