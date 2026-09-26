@@ -672,7 +672,7 @@
       <button class="btn-3d" onclick="supprimerEpreuveActuelle()" style="color: #ef4444;">🗑️ Supprimer cette sauvegarde</button>
     </div>
 
-    <!-- NOUVELLE OPTION : Importation PDF depuis le stockage du téléphone -->
+    <!-- OPTION : Importation PDF depuis le stockage du téléphone -->
     <div class="menu-group" style="border-left-color: var(--panel-accent);">
       <div class="menu-title">📂 Reprendre un Fichier PDF</div>
       <label style="font-size: 0.75rem; font-weight: 600; margin-bottom: 6px; display: block; color: var(--text-color);">Importer un PDF depuis le stockage :</label>
@@ -811,7 +811,8 @@
           <option value="∅">∅ : ensemble vide</option>
           <option value="A ∪ B">A ∪ B : union d'ensembles</option>
           <option value="A ∩ B">A ∩ B : intersection d'ensembles</option>
-          <option value="A \ B">A \ B : différence d'ensembles</option>
+          <option value="A \ B">A \ B (ou A ∖ B) : différence d'ensembles / privé de (petit)</option>
+          <option value="∖">∖ : petit symbole oblique de privé de (compact)</option>
           <option value="A^c">A^c : complémentaire de A</option>
           <option value="A × B">A × B : produit cartésien</option>
         </optgroup>
@@ -1149,6 +1150,90 @@
 
     let selectedEl = null;
 
+    // --- CORRECTION DU SYSTÈME DE SAUVEGARDE LOCALE ---
+    function chargerListeSauvegardes() {
+      const select = document.getElementById('selectSauvegardes');
+      select.innerHTML = '<option value="" disabled selected>-- Choisir une épreuve sauvegardée --</option>';
+      const keys = Object.keys(localStorage).filter(k => k.startsWith('athemix_epreuve_'));
+      keys.forEach(key => {
+        const nom = key.replace('athemix_epreuve_', '');
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = nom;
+        select.appendChild(opt);
+      });
+    }
+
+    function sauvegarderEtatActuel() {
+      const nomInput = document.getElementById('nomEpreuveInput').value.trim() || 'Épreuve sans nom';
+      const workspaceHTML = workspaceScaler.innerHTML;
+      const cle = 'athemix_epreuve_' + nomInput;
+      try {
+        localStorage.setItem(cle, workspaceHTML);
+        chargerListeSauvegardes();
+        alert('Épreuve "' + nomInput + '" sauvegardée avec succès !');
+      } catch (e) {
+        alert('Erreur lors de la sauvegarde (stockage plein ?).');
+      }
+    }
+
+    function chargerEpreuveSelectionnee(key) {
+      if (!key) return;
+      const htmlContent = localStorage.getItem(key);
+      if (htmlContent) {
+        workspaceScaler.innerHTML = htmlContent;
+        // Ré-attacher l'interactivité si nécessaire
+        document.querySelectorAll('.inserted-shape, .imported-img, .imported-svg, .inserted-table-container, .watermark-overlay').forEach(el => {
+          makeElementInteractive(el);
+        });
+        alert('Épreuve chargée avec succès !');
+      }
+    }
+
+    function supprimerEpreuveActuelle() {
+      const select = document.getElementById('selectSauvegardes');
+      const key = select.value;
+      if (!key) {
+        alert('Veuillez sélectionner une épreuve sauvegardée à supprimer.');
+        return;
+      }
+      if (confirm('Voulez-vous vraiment supprimer cette sauvegarde ?')) {
+        localStorage.removeItem(key);
+        chargerListeSauvegardes();
+        alert('Sauvegarde supprimée.');
+      }
+    }
+
+    function creerNouvelleFeuille() {
+      if (confirm('Créer une nouvelle feuille va réinitialiser l\'espace actuel. Êtes-vous sûr ?')) {
+        workspaceScaler.innerHTML = `
+          <div class="a4-container lined" id="a4Page">
+            <div class="watermark-overlay" id="watermark" onclick="selectElement(this)">CORRECTION OFFICIELLE</div>
+            <div class="a4-header">
+              <div class="a4-header-row">
+                <input type="text" placeholder="Matière (ex: Physique / Dessin Technique)">
+                <input type="text" placeholder="Classe">
+                <input type="text" placeholder="Date: JJ/MM/AAAA">
+              </div>
+              <div class="a4-header-row">
+                <input type="text" class="author-field" placeholder="Correcteur / Auteur">
+              </div>
+            </div>
+            <div class="draggable-canvas-container" id="draggableCanvas" style="display:flex;">
+              <div class="canvas-handle" id="canvasHandle">
+                <span>✋ Déplacer le cadran</span>
+                <span class="tool-badge" id="toolBadge">Outil : Trait Plein</span>
+                <span style="cursor: pointer; font-size: 1rem;" onclick="masquerCadran()">❌</span>
+              </div>
+              <canvas id="schemaCanvas"></canvas>
+            </div>
+            <div class="a4-editor" id="editor" contenteditable="true" onclick="positionnerCurseurDirect(event)">Toucher ici pour commencer à écrire...</div>
+          </div>
+        `;
+        resetZoom();
+      }
+    }
+
     function appliquerCadreTexte(className) {
       const selection = window.getSelection();
       if (!selection.rangeCount || selection.isCollapsed) {
@@ -1220,7 +1305,6 @@
       }
     }
 
-    // FONCTION D'IMPORTATION DE PDF DEPUIS LE STOCKAGE DU TÉLÉPHONE
     async function importerFichierPDF(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -1232,7 +1316,7 @@
         try {
           const pdfDoc = await pdfjsLib.getDocument({ data: typedarray }).promise;
           const workspace = document.getElementById('workspaceScaler');
-          workspace.innerHTML = ""; // Nettoyer l'espace de travail pour charger les pages du PDF
+          workspace.innerHTML = ""; 
 
           for (let i = 1; i <= pdfDoc.numPages; i++) {
             const page = await pdfDoc.getPage(i);
@@ -1255,9 +1339,9 @@
             const context = canvasPDF.getContext('2d');
             await page.render({ canvasContext: context, viewport: viewport }).promise;
           }
-          alert("Fichier PDF importé avec succès depuis votre stockage ! Vous pouvez continuer votre travail.");
+          alert("Fichier PDF importé avec succès depuis votre stockage !");
         } catch (error) {
-          console.error("Erreur lors du chargement du PDF :", error);
+          console.error("Erreur chargement PDF :", error);
           alert("Impossible de lire ce fichier PDF.");
         }
       };
@@ -1268,7 +1352,7 @@
       const lignes = parseInt(document.getElementById('customRows').value) || 3;
       const colonnes = parseInt(document.getElementById('customCols').value) || 3;
       
-      const currentPage = document.getElementById('a4Page');
+      const currentPage = document.getElementById('a4Page') || document.querySelector('.a4-container');
       const container = document.createElement('div');
       container.className = 'inserted-table-container';
       
@@ -1292,7 +1376,7 @@
     }
 
     function insererFormeInsee(toolKey) {
-      const currentPage = document.getElementById('a4Page');
+      const currentPage = document.getElementById('a4Page') || document.querySelector('.a4-container');
       const container = document.createElement('div');
       container.className = 'inserted-shape';
       container.innerHTML = SVG_TEMPLATES[toolKey] || SVG_TEMPLATES.rect;
@@ -1389,14 +1473,16 @@
 
     function toggleWatermark(show) {
       const wm = document.getElementById('watermark');
-      if (show) {
-        wm.classList.add('active');
-        makeElementInteractive(wm);
-        selectElement(wm);
-      } else {
-        wm.classList.remove('active');
-        wm.classList.remove('selected');
-        if (selectedEl === wm) selectedEl = null;
+      if (wm) {
+        if (show) {
+          wm.classList.add('active');
+          makeElementInteractive(wm);
+          selectElement(wm);
+        } else {
+          wm.classList.remove('active');
+          wm.classList.remove('selected');
+          if (selectedEl === wm) selectedEl = null;
+        }
       }
     }
 
@@ -1421,7 +1507,7 @@
 
     window.addEventListener('load', () => {
       resetZoom();
-      fitCanvasSize();
+      chargerListeSauvegardes();
     });
 
     let state = { x: 0, y: 0, fontSize: 64, opacity: 1, rotation: 0 };
@@ -1489,7 +1575,8 @@
           const img = document.createElement('img');
           img.src = event.target.result;
           img.className = 'imported-img';
-          document.getElementById('a4Page').appendChild(img);
+          const targetPage = document.getElementById('a4Page') || document.querySelector('.a4-container');
+          targetPage.appendChild(img);
           makeElementInteractive(img);
           selectElement(img);
         };
@@ -1527,28 +1614,29 @@
     }
 
     function updateWatermarkText() {
-      document.getElementById('watermark').textContent = document.getElementById('watermarkInput').value;
+      const wm = document.getElementById('watermark');
+      if (wm) wm.textContent = document.getElementById('watermarkInput').value;
     }
 
     function updateWatermarkColor() {
-      document.getElementById('watermark').style.color = document.getElementById('watermarkColor').value;
+      const wm = document.getElementById('watermark');
+      if (wm) wm.style.color = document.getElementById('watermarkColor').value;
     }
 
     function setTheme(theme) { document.body.setAttribute('data-theme', theme); }
-    function masquerCadran() { document.getElementById('draggableCanvas').style.display = 'none'; }
-    function afficherCadran() { document.getElementById('draggableCanvas').style.display = 'flex'; fitCanvasSize(); }
-
-    function fitCanvasSize() {
-      if (canvas && dragContainer) {
-        canvas.width = dragContainer.clientWidth;
-        canvas.height = dragContainer.clientHeight - 30;
-      }
+    function masquerCadran() { 
+      const dc = document.getElementById('draggableCanvas');
+      if (dc) dc.style.display = 'none'; 
+    }
+    function afficherCadran() { 
+      const dc = document.getElementById('draggableCanvas');
+      if (dc) dc.style.display = 'flex'; 
     }
 
-    let currentTool = 'line';
-    function setTool(tool) {
-      currentTool = tool;
-      if (toolBadge) toolBadge.textContent = 'Outil : ' + tool;
+    function effacerCanvas() {
+      if (ctx && canvas) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
     }
 
     function insererSymbolSelect(selectObj) {
@@ -1586,9 +1674,11 @@
 
     let activeDrag = false, currentX = 0, currentY = 0, initialX = 0, initialY = 0;
 
-    dragHandle.addEventListener("mousedown", dragStart);
-    document.addEventListener("mouseup", dragEnd);
-    document.addEventListener("mousemove", drag);
+    if (dragHandle) {
+      dragHandle.addEventListener("mousedown", dragStart);
+      document.addEventListener("mouseup", dragEnd);
+      document.addEventListener("mousemove", drag);
+    }
 
     function dragStart(e) {
       initialX = e.clientX - currentX; initialY = e.clientY - currentY;
@@ -1596,7 +1686,7 @@
     }
     function dragEnd() { activeDrag = false; }
     function drag(e) {
-      if (activeDrag) {
+      if (activeDrag && dragContainer) {
         e.preventDefault();
         currentX = e.clientX - initialX; currentY = e.clientY - initialY;
         dragContainer.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
